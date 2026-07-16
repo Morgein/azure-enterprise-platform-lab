@@ -16,7 +16,7 @@ The roadmap moves from local development to real Azure deployment and then to ad
 
 ## Phase 0 - Repository and safety foundation
 
-Status: **In progress**
+Status: **Completed**
 
 ### Objectives
 

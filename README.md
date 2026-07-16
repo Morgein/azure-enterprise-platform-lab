@@ -5,7 +5,8 @@ A production-oriented Azure platform engineering project built incrementally fro
 The project uses a real Azure for Students subscription with strict cost controls. Infrastructure is deployed primarily through Terraform, application delivery is automated with GitHub Actions, and each implementation phase includes validation, evidence, troubleshooting, and cleanup.
 
 > Status: In development  
-> Current phase: Phase 0 - Repository and safety foundation
+> Phase 0 status: Completed
+> Next phase: Phase 1 - Local application and container baseline
 
 ---
 
@@ -232,7 +233,7 @@ The final tool selection may be refined through Architecture Decision Records.
 
 | Phase | Scope | Status |
 |---|---|---|
-| 0 | Repository, tooling, Git configuration, documentation, safety, and cost controls | In progress |
+| 0 | Repository, tooling, Git configuration, documentation, safety, and cost controls | Completed |
 | 1 | Local FastAPI application, unit tests, health endpoints, and Docker image | Planned |
 | 2 | Terraform fundamentals, provider configuration, modules, and remote state | Planned |
 | 3 | Resource groups, naming, tags, policy, budgets, and governance | Planned |
@@ -1043,18 +1044,32 @@ The project is complete only when:
 
 ## Current work
 
-The current implementation work is focused on Phase 0:
+Phase 0 has been completed.
+
+Completed foundation work includes:
 
 - local tool verification;
+- Git and GitHub configuration;
+- author email privacy;
 - repository initialization;
-- Git identity and email privacy;
 - directory structure;
 - `.gitignore`;
 - `.editorconfig`;
 - project documentation;
-- cost-control planning;
-- Architecture Decision Records;
+- cost-control policy;
+- initial Architecture Decision Record;
 - initial Git commit;
-- publication of the repository to GitHub.
+- public GitHub repository.
+
+The next implementation phase is Phase 1:
+
+- FastAPI application;
+- unit tests;
+- health endpoints;
+- structured responses;
+- correlation IDs;
+- secure Docker image;
+- local container validation;
+- vulnerability scanning.
 
 No Azure resources have been deployed by this repository yet.
