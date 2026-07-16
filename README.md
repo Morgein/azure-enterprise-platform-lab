@@ -5,14 +5,15 @@ A production-oriented Azure platform engineering project built incrementally fro
 The project uses a real Azure for Students subscription with strict cost controls. Infrastructure is deployed primarily through Terraform, application delivery is automated with GitHub Actions, and each implementation phase includes validation, evidence, troubleshooting, and cleanup.
 
 > Status: In development  
-> Phase 0 status: Completed
-> Next phase: Phase 1 - Local application and container baseline
+> Completed baseline: repository, FastAPI, container CI, Terraform bootstrap, and Azure remote state  
+> Current phase: Development Network Foundation
 
 ---
 
 ## Table of contents
 
 - [Project overview](#project-overview)
+- [Current implementation](#current-implementation)
 - [Engineering objectives](#engineering-objectives)
 - [Architecture](#architecture)
 - [Request flow](#request-flow)
@@ -48,6 +49,65 @@ The project is not a collection of unrelated Azure exercises. All services are i
 The implementation starts with a low-cost serverless baseline based on Azure Container Apps and Azure API Management. Advanced phases extend the same platform with Azure Kubernetes Service, private networking, GitOps, progressive delivery, workload identity, distributed tracing, reliability testing, and disaster-recovery procedures.
 
 Because the project uses a limited Azure for Students credit balance, expensive resources are deployed only during controlled laboratory windows. Production-oriented architectures that would require significant permanent cost are represented through validated Terraform plans, diagrams, decision records, cost estimates, and clearly documented limitations.
+
+---
+
+## Current implementation
+
+The repository currently contains a tested application baseline, hardened container workflow, Terraform foundation, and a real Azure remote-state backend.
+
+### Delivered application baseline
+
+- Python FastAPI application with versioned routing;
+- liveness and readiness endpoints;
+- service-information endpoint;
+- correlation-ID middleware;
+- typed response models;
+- Pytest test suite with more than 97% measured coverage;
+- Ruff formatting and static analysis;
+- multi-stage Docker build;
+- non-root runtime user;
+- container health check and local smoke validation.
+
+### Delivered CI baseline
+
+- pull-request and main-branch GitHub Actions triggers;
+- Python formatting, static analysis, tests, and coverage enforcement;
+- container build and runtime smoke checks;
+- recursive Terraform formatting validation;
+- matrix-based validation of the bootstrap and development root modules;
+- read-only provider lock-file enforcement;
+- CI validation without access to Azure credentials.
+
+### Delivered Terraform and Azure baseline
+
+- pinned Terraform and AzureRM provider versions;
+- environment-specific variables, locals, naming, tags, and outputs;
+- dedicated bootstrap root module;
+- Azure Resource Group for Terraform state infrastructure;
+- secure Standard LRS Storage Account in an allowed Azure region;
+- private Blob Container for state files;
+- Blob versioning and soft-delete recovery controls;
+- shared-key access disabled;
+- Microsoft Entra ID data-plane authentication;
+- least-privilege Storage Blob Data Contributor role assignment;
+- partial AzureRM backend configuration;
+- remote development state stored under `dev/terraform.tfstate`;
+- Azure Blob lease-based state locking;
+- reviewed plans and pull-request-based infrastructure changes.
+
+### Implemented control-plane flow
+
+```mermaid
+flowchart TD
+    Engineer["Engineer"] --> GitHub["GitHub and CI"]
+    Engineer --> Terraform["Terraform CLI"]
+    Terraform --> Azure["Azure control plane"]
+    Terraform --> Backend["Azure Blob remote state"]
+    Backend --> Lock["State locking and recovery"]
+```
+
+The next implementation step is the Development Network Foundation: a reusable Terraform network module, development Resource Group, Virtual Network, segmented subnets, Network Security Groups, reviewed deployment plan, and post-deployment verification.
 
 ---
 
@@ -234,14 +294,14 @@ The final tool selection may be refined through Architecture Decision Records.
 | Phase | Scope | Status |
 |---|---|---|
 | 0 | Repository, tooling, Git configuration, documentation, safety, and cost controls | Completed |
-| 1 | Local FastAPI application, unit tests, health endpoints, and Docker image | Planned |
-| 2 | Terraform fundamentals, provider configuration, modules, and remote state | Planned |
-| 3 | Resource groups, naming, tags, policy, budgets, and governance | Planned |
-| 4 | Virtual networks, subnets, NSGs, routing, DNS, and private connectivity | Planned |
+| 1 | Local FastAPI application, unit tests, health endpoints, and Docker image | Completed |
+| 2 | Terraform fundamentals, provider configuration, bootstrap, and remote state | Completed |
+| 3 | Resource groups, naming, tags, policy, budgets, and governance | In progress |
+| 4 | Virtual networks, subnets, NSGs, routing, DNS, and private connectivity | Next |
 | 5 | Azure Container Registry and Azure Container Apps baseline | Planned |
 | 6 | Managed identity, Key Vault, Storage, and PostgreSQL | Planned |
 | 7 | Azure API Management, OpenAPI, policies, security, and throttling | Planned |
-| 8 | GitHub Actions, OIDC, Terraform pipelines, and application CI/CD | Planned |
+| 8 | GitHub Actions, OIDC, Terraform pipelines, and application CI/CD | In progress |
 | 9 | Azure Monitor, Log Analytics, Application Insights, OpenTelemetry, and KQL | Planned |
 | 10 | AKS, Helm, Kubernetes security, autoscaling, and persistent storage | Planned |
 | 11 | GitOps, progressive delivery, rollback, and drift detection | Planned |
@@ -253,6 +313,7 @@ The final tool selection may be refined through Architecture Decision Records.
 - `Planned` - the phase has not started.
 - `In progress` - implementation or validation is currently active.
 - `Completed` - implementation, testing, documentation, evidence, and cleanup are complete.
+- `Next` - the phase is the next approved implementation target.
 - `Reference design` - the architecture is documented and validated without permanent deployment because of cost or subscription limitations.
 
 ---
@@ -263,17 +324,20 @@ The final tool selection may be refined through Architecture Decision Records.
 .
 ├── .github/
 │   └── workflows/
-│       └── GitHub Actions workflows
+│       ├── ci.yml
+│       └── terraform-ci.yml
 ├── apim/
 │   ├── apis/
 │   │   └── OpenAPI specifications
 │   └── policies/
 │       └── Azure API Management policies
 ├── application/
+│   ├── Dockerfile
+│   ├── pyproject.toml
 │   ├── src/
-│   │   └── FastAPI application source code
+│   │   └── azure_platform_api/
 │   └── tests/
-│       └── Application unit tests
+│       └── FastAPI and middleware tests
 ├── docs/
 │   ├── adr/
 │   │   └── Architecture Decision Records
@@ -321,7 +385,7 @@ Empty directories contain temporary `.gitkeep` files. These files are removed wh
 
 Terraform is the primary provisioning tool.
 
-The infrastructure code will be separated into reusable modules and environment-specific root modules.
+The infrastructure code is separated into reusable modules and environment-specific root modules. The bootstrap and development root modules are already implemented; reusable service modules are introduced incrementally.
 
 Planned modules include:
 
@@ -362,7 +426,7 @@ No infrastructure change is considered complete until the deployed state is vali
 
 ### Terraform state
 
-Terraform state will use a dedicated Azure Storage backend.
+The development environment uses a dedicated Azure Storage backend. The backend was created by the separate bootstrap root module and is accessed through Microsoft Entra ID rather than Storage Account keys.
 
 The backend will be protected through:
 
@@ -375,6 +439,8 @@ The backend will be protected through:
 - no state files committed to Git.
 
 Terraform state may contain sensitive values and must be treated as protected data.
+
+The bootstrap state remains local and protected while it manages the remote-state infrastructure itself. Development state is stored remotely under a separate Blob key and uses Azure-native state locking.
 
 ---
 
@@ -428,7 +494,7 @@ Each environment uses separate configuration, state, deployment permissions, and
 
 ## Networking strategy
 
-The networking implementation progresses from basic to advanced.
+The networking implementation is the current active platform phase and progresses from basic segmentation to advanced private connectivity.
 
 Planned networking topics include:
 
@@ -449,6 +515,8 @@ Planned networking topics include:
 - Application Gateway and WAF reference design;
 - Network Watcher troubleshooting;
 - private AKS architecture.
+
+The initial development deployment prioritizes resources without standing hourly charges: Resource Groups, Virtual Networks, Subnets, and Network Security Groups. Chargeable components such as NAT Gateway, Application Gateway, private endpoints, and advanced firewall services require a separate cost review before deployment.
 
 The final network design follows least-access principles.
 
@@ -629,9 +697,9 @@ AKS is created only for controlled laboratory periods and destroyed after valida
 
 ## CI/CD strategy
 
-GitHub Actions provides the delivery platform.
+GitHub Actions provides the delivery platform. Application CI and Terraform formatting and validation are already active. Azure deployment through GitHub OIDC remains a later implementation step.
 
-Planned workflows include:
+Implemented and planned workflows include:
 
 - pull request validation;
 - Python linting and testing;
@@ -775,6 +843,8 @@ The project uses a limited Azure for Students credit balance.
 
 Cost is treated as an engineering requirement.
 
+The current persistent Azure footprint is limited to the Terraform remote-state foundation: one Resource Group, one Standard LRS Storage Account, one private Blob Container, and one role assignment. The network foundation is selected next because Resource Groups, Virtual Networks, Subnets, and Network Security Groups do not introduce the standing compute cost of application runtimes, gateways, or managed databases.
+
 ### Cost-control rules
 
 - Use consumption-based or free tiers where suitable.
@@ -898,6 +968,18 @@ Planned scenarios include:
 - failed GitHub Actions deployment;
 - unavailable backend during rollout;
 - incomplete cleanup.
+
+Completed troubleshooting exercises already include:
+
+- recovery from a partial Terraform apply;
+- Azure Policy rejection of a disallowed deployment region;
+- separation of Resource Group and Storage Account regions;
+- propagation of Terraform sensitivity through derived values;
+- Dockerfile parse-error correction;
+- missing Python test fixture diagnosis;
+- CI lint failure diagnosis and correction;
+- backend-aware CI validation failure diagnosis;
+- safe recovery-plan generation with zero destroy actions.
 
 Each troubleshooting document contains:
 
@@ -1044,32 +1126,20 @@ The project is complete only when:
 
 ## Current work
 
-Phase 0 has been completed.
+The repository, application baseline, container baseline, Terraform foundation, secure backend bootstrap, and development remote-state configuration are complete.
 
-Completed foundation work includes:
+The current implementation target is the Development Network Foundation:
 
-- local tool verification;
-- Git and GitHub configuration;
-- author email privacy;
-- repository initialization;
-- directory structure;
-- `.gitignore`;
-- `.editorconfig`;
-- project documentation;
-- cost-control policy;
-- initial Architecture Decision Record;
-- initial Git commit;
-- public GitHub repository.
+- align development examples with the subscription's allowed region;
+- define the development IP address plan;
+- create a reusable Terraform network module;
+- create the development Resource Group;
+- create a Virtual Network;
+- create segmented application, API, data, management, and private-endpoint subnets where justified;
+- create and associate Network Security Groups;
+- expose sanitized module outputs;
+- extend Terraform validation and documentation;
+- review a saved Terraform plan before deployment;
+- verify Azure resources, state locking, tags, and cost state after deployment.
 
-The next implementation phase is Phase 1:
-
-- FastAPI application;
-- unit tests;
-- health endpoints;
-- structured responses;
-- correlation IDs;
-- secure Docker image;
-- local container validation;
-- vulnerability scanning.
-
-No Azure resources have been deployed by this repository yet.
+Azure API Management, Container Apps, private endpoints, managed databases, monitoring ingestion, and AKS remain controlled later phases because they require additional architectural and cost review.
