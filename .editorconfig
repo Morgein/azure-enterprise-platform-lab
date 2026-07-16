@@ -1,0 +1,79 @@
+# Terraform working directories
+**/.terraform/*
+
+# Terraform state
+*.tfstate
+*.tfstate.*
+
+# Terraform plans
+*.tfplan
+plan.out
+
+# Terraform crash logs
+crash.log
+crash.*.log
+
+# Terraform local configuration
+.terraformrc
+terraform.rc
+
+# Terraform override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform variable files may contain secrets
+*.tfvars
+*.tfvars.json
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Test and coverage output
+.coverage
+coverage.xml
+htmlcov/
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+
+# Certificates and private keys
+*.pem
+*.key
+*.pfx
+*.p12
+
+# Kubernetes access configuration
+kubeconfig
+kubeconfig.*
+*.kubeconfig
+
+# IDE configuration
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Logs and temporary files
+*.log
+*.tmp
+tmp/
