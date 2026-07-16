@@ -92,8 +92,3 @@ jobs:
             validate \
             -no-color
 
-      - name: Show provider requirements
-        run: |
-          terraform \
-            -chdir=${{ matrix.root_module }} \
-            providers
