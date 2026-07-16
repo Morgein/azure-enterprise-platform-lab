@@ -1,8 +1,10 @@
 locals {
   resource_group_name = "rg-aeplab-tfstate-${var.location}"
 
-  generated_storage_account_name = lower(
-    "staeplab${substr(md5(var.subscription_id), 0, 8)}"
+  generated_storage_account_name = nonsensitive(
+    lower(
+      "staeplab${substr(md5(var.subscription_id), 0, 8)}"
+    )
   )
 
   storage_account_name = coalesce(
