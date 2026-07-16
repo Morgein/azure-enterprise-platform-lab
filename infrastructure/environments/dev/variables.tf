@@ -33,7 +33,7 @@ variable "environment" {
 variable "location" {
   description = "Primary Azure region for the environment."
   type        = string
-  default     = "westeurope"
+  default     = "polandcentral"
 
   validation {
     condition     = length(trimspace(var.location)) > 0
@@ -55,6 +55,67 @@ variable "workload_name" {
     )
 
     error_message = "workload_name must contain 3-20 lowercase letters, numbers, or hyphens."
+  }
+}
+
+variable "virtual_network_address_space" {
+  description = "CIDR address spaces assigned to the development Virtual Network."
+  type        = list(string)
+  default     = ["10.20.0.0/16"]
+
+  validation {
+    condition = (
+      length(var.virtual_network_address_space) > 0 &&
+      alltrue([
+        for cidr in var.virtual_network_address_space :
+        can(cidrhost(cidr, 0))
+      ])
+    )
+
+    error_message = "virtual_network_address_space must contain at least one valid CIDR block."
+  }
+}
+
+variable "subnet_address_prefixes" {
+  description = "CIDR address prefixes assigned to the development subnets."
+
+  type = object({
+    container_apps    = list(string)
+    api_management    = list(string)
+    application       = list(string)
+    data              = list(string)
+    private_endpoints = list(string)
+    management        = list(string)
+  })
+
+  default = {
+    container_apps    = ["10.20.0.0/23"]
+    api_management    = ["10.20.2.0/24"]
+    application       = ["10.20.3.0/24"]
+    data              = ["10.20.4.0/24"]
+    private_endpoints = ["10.20.5.0/24"]
+    management        = ["10.20.6.0/24"]
+  }
+
+  validation {
+    condition = alltrue([
+      for prefixes in [
+        var.subnet_address_prefixes.container_apps,
+        var.subnet_address_prefixes.api_management,
+        var.subnet_address_prefixes.application,
+        var.subnet_address_prefixes.data,
+        var.subnet_address_prefixes.private_endpoints,
+        var.subnet_address_prefixes.management
+        ] : (
+        length(prefixes) > 0 &&
+        alltrue([
+          for cidr in prefixes :
+          can(cidrhost(cidr, 0))
+        ])
+      )
+    ])
+
+    error_message = "Every subnet must contain at least one valid CIDR block."
   }
 }
 
