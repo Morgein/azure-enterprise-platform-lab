@@ -29,10 +29,39 @@ env:
   CHECKPOINT_DISABLE: "1"
 
 jobs:
-  terraform-validation:
-    name: Terraform Format and Validate
+  terraform-format:
+    name: Terraform Format
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.15.8"
+          terraform_wrapper: false
+
+      - name: Check Terraform formatting
+        run: terraform fmt -check -recursive infrastructure
+
+  terraform-validate:
+    name: Validate ${{ matrix.root_module }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
+    needs:
+      - terraform-format
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        root_module:
+          - infrastructure/bootstrap
+          - infrastructure/environments/dev
 
     steps:
       - name: Check out repository
@@ -47,27 +76,24 @@ jobs:
       - name: Show Terraform version
         run: terraform version
 
-      - name: Check Terraform formatting
-        run: terraform fmt -check -recursive infrastructure
-
-      - name: Initialize development root module
+      - name: Initialize root module
         run: |
           terraform \
-            -chdir=infrastructure/environments/dev \
+            -chdir=${{ matrix.root_module }} \
             init \
             -backend=false \
             -input=false \
             -lockfile=readonly
 
-      - name: Validate development root module
+      - name: Validate root module
         run: |
           terraform \
-            -chdir=infrastructure/environments/dev \
+            -chdir=${{ matrix.root_module }} \
             validate \
             -no-color
 
       - name: Show provider requirements
         run: |
           terraform \
-            -chdir=infrastructure/environments/dev \
+            -chdir=${{ matrix.root_module }} \
             providers
