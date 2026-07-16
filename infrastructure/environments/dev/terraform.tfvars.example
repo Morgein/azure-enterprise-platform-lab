@@ -1,10 +1,21 @@
 subscription_id = "00000000-0000-0000-0000-000000000000"
 
 environment   = "dev"
-location      = "westeurope"
+location      = "polandcentral"
 workload_name = "platform"
+
+virtual_network_address_space = ["10.20.0.0/16"]
+
+subnet_address_prefixes = {
+  container_apps    = ["10.20.0.0/23"]
+  api_management    = ["10.20.2.0/24"]
+  application       = ["10.20.3.0/24"]
+  data              = ["10.20.4.0/24"]
+  private_endpoints = ["10.20.5.0/24"]
+  management        = ["10.20.6.0/24"]
+}
 
 additional_tags = {
   Purpose = "Learning"
-  Phase   = "TerraformFoundation"
+  Phase   = "NetworkFoundation"
 }
