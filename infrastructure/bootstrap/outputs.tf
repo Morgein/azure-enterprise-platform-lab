@@ -29,3 +29,8 @@ output "backend_configuration" {
     use_azuread_auth     = true
   }
 }
+
+output "storage_account_location" {
+  description = "Azure region of the Terraform state Storage Account."
+  value       = azurerm_storage_account.state.location
+}
