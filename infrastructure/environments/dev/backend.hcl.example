@@ -1,0 +1,5 @@
+use_cli              = true
+use_azuread_auth     = true
+storage_account_name = "replace-with-storage-account-name"
+container_name       = "tfstate"
+key                  = "dev/terraform.tfstate"
