@@ -1,7 +1,7 @@
 subscription_id         = "00000000-0000-0000-0000-000000000000"
 state_admin_principal_id = "00000000-0000-0000-0000-000000000000"
 
-location                   = "westeurope"
+location                   = "polandcentral"
 container_name             = "tfstate"
 soft_delete_retention_days = 7
 

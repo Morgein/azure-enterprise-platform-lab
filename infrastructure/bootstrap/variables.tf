@@ -101,3 +101,14 @@ variable "additional_tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "storage_account_location" {
+  description = "Azure region for the Terraform state Storage Account."
+  type        = string
+  default     = "polandcentral"
+
+  validation {
+    condition     = length(trimspace(var.storage_account_location)) > 0
+    error_message = "storage_account_location must not be empty."
+  }
+}
