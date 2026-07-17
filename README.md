@@ -1,21 +1,28 @@
 # Azure Enterprise Platform Lab
 
-A production-oriented Azure platform engineering project built incrementally from cloud fundamentals to advanced Azure, DevOps, security, Kubernetes, observability, reliability, and FinOps practices.
+[![Continuous Integration](https://github.com/Morgein/azure-enterprise-platform-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/Morgein/azure-enterprise-platform-lab/actions/workflows/ci.yml)
+[![Terraform Validation](https://github.com/Morgein/azure-enterprise-platform-lab/actions/workflows/terraform-ci.yml/badge.svg)](https://github.com/Morgein/azure-enterprise-platform-lab/actions/workflows/terraform-ci.yml)
 
-The project uses a real Azure for Students subscription with strict cost controls. Infrastructure is deployed primarily through Terraform, application delivery is automated with GitHub Actions, and each implementation phase includes validation, evidence, troubleshooting, and cleanup.
+A production-oriented Azure Platform Engineering project built incrementally from cloud fundamentals to advanced Azure, DevOps, security, Kubernetes, observability, reliability, and FinOps practices.
 
-> Status: In development  
-> Completed baseline: repository, FastAPI, container CI, Terraform bootstrap, and Azure remote state  
-> Current phase: Development Network Foundation
+The project uses a real Azure for Students subscription with strict cost controls. Infrastructure is provisioned primarily through Terraform, application validation is automated with GitHub Actions, and every completed implementation phase includes documentation, deployment evidence, troubleshooting, and cost review.
+
+> **Status:** In development  
+> **Roadmap completion:** Approximately 34%  
+> **Completed baseline:** Repository, FastAPI, Docker, CI, Terraform bootstrap, Azure remote state, and Development Network Foundation  
+> **Current phase:** Azure Container Registry and Azure Container Apps baseline  
+> **Primary region:** Poland Central
 
 ---
 
 ## Table of contents
 
 - [Project overview](#project-overview)
+- [Project progress](#project-progress)
 - [Current implementation](#current-implementation)
 - [Engineering objectives](#engineering-objectives)
 - [Architecture](#architecture)
+- [Deployed development network](#deployed-development-network)
 - [Request flow](#request-flow)
 - [Deployment flow](#deployment-flow)
 - [Technology stack](#technology-stack)
@@ -36,123 +43,292 @@ The project uses a real Azure for Students subscription with strict cost control
 - [Evidence and documentation](#evidence-and-documentation)
 - [Provisioning rules](#provisioning-rules)
 - [Security rules](#security-rules)
+- [Local development](#local-development)
 - [Project completion criteria](#project-completion-criteria)
+- [Current work](#current-work)
 
 ---
 
 ## Project overview
 
-Azure Enterprise Platform Lab is a complete cloud engineering environment that demonstrates how an application platform can be designed, provisioned, secured, delivered, monitored, scaled, and recovered on Microsoft Azure.
+Azure Enterprise Platform Lab is a complete Cloud Engineering and DevOps learning environment that demonstrates how an application platform can be designed, provisioned, secured, delivered, monitored, scaled, troubleshot, and recovered on Microsoft Azure.
 
-The project is not a collection of unrelated Azure exercises. All services are introduced as parts of one connected platform.
+This repository is not a collection of unrelated Azure exercises. All services are introduced as components of one connected enterprise-style platform.
 
-The implementation starts with a low-cost serverless baseline based on Azure Container Apps and Azure API Management. Advanced phases extend the same platform with Azure Kubernetes Service, private networking, GitOps, progressive delivery, workload identity, distributed tracing, reliability testing, and disaster-recovery procedures.
+The implementation starts with a cost-controlled application baseline based on:
 
-Because the project uses a limited Azure for Students credit balance, expensive resources are deployed only during controlled laboratory windows. Production-oriented architectures that would require significant permanent cost are represented through validated Terraform plans, diagrams, decision records, cost estimates, and clearly documented limitations.
+- Python and FastAPI;
+- Docker;
+- GitHub Actions;
+- Terraform;
+- Azure Virtual Network;
+- Azure Container Registry;
+- Azure Container Apps;
+- Azure API Management.
+
+Advanced phases extend the same platform with:
+
+- managed identities;
+- Azure Key Vault;
+- Azure Database for PostgreSQL;
+- Azure Blob Storage;
+- private networking;
+- Azure Kubernetes Service;
+- Helm;
+- GitOps;
+- progressive delivery;
+- OpenTelemetry;
+- distributed tracing;
+- reliability testing;
+- backup and disaster recovery;
+- FinOps controls.
+
+Because the project uses a limited Azure for Students credit balance, expensive resources are deployed only during controlled laboratory windows.
+
+Architectures that are too expensive to operate continuously are represented through:
+
+- validated Terraform configurations;
+- saved Terraform plans;
+- architecture diagrams;
+- Architecture Decision Records;
+- security analysis;
+- cost estimates;
+- deployment runbooks;
+- documented limitations.
+
+---
+
+## Project progress
+
+The official roadmap currently contains fourteen phases numbered from `0` to `13`.
+
+The current estimated completion is calculated from completed and partially implemented phases:
+
+| Phase | Area | Progress |
+|---|---|---:|
+| 0 | Repository and project foundation | 100% |
+| 1 | FastAPI application and container baseline | 100% |
+| 2 | Terraform bootstrap and remote state | 100% |
+| 3 | Governance and cost controls | 35% |
+| 4 | Development Network Foundation | 100% |
+| 5 | Azure Container Registry and Container Apps | 0% |
+| 6 | Identity, Key Vault, Storage, and PostgreSQL | 0% |
+| 7 | Azure API Management | 0% |
+| 8 | CI/CD and GitHub OIDC | 40% |
+| 9 | Observability and SRE | 0% |
+| 10 | Azure Kubernetes Service | 0% |
+| 11 | GitOps and progressive delivery | 0% |
+| 12 | Reliability, disaster recovery, and FinOps | 0% |
+| 13 | Final validation and project defense | 0% |
+
+Approximate roadmap completion:
+
+```text
+(100 + 100 + 100 + 35 + 100 + 40) / 14 = 33.9%
+```
+
+Therefore, the project is currently considered approximately **34% complete**.
+
+This percentage measures roadmap completion, not only the number of files or deployed Azure resources. Advanced phases such as AKS, GitOps, APIM, observability, and disaster recovery represent a significant portion of the remaining engineering work.
 
 ---
 
 ## Current implementation
 
-The repository currently contains a tested application baseline, hardened container workflow, Terraform foundation, and a real Azure remote-state backend.
+The repository currently contains a tested application, hardened container workflow, automated CI validation, secure Terraform backend, and a deployed Development Network Foundation.
+
+### Delivered repository baseline
+
+- public GitHub repository;
+- documented repository structure;
+- protected Git workflow through feature branches and Pull Requests;
+- commit and Pull Request validation;
+- `.gitignore` protection for secrets and Terraform state;
+- environment separation;
+- architecture documentation;
+- cost-control rules;
+- provisioning and security rules.
 
 ### Delivered application baseline
 
-- Python FastAPI application with versioned routing;
-- liveness and readiness endpoints;
+- Python FastAPI application;
+- versioned API routing;
+- liveness endpoint;
+- readiness endpoint;
 - service-information endpoint;
 - correlation-ID middleware;
 - typed response models;
-- Pytest test suite with more than 97% measured coverage;
-- Ruff formatting and static analysis;
+- structured application configuration;
+- Pytest test suite;
+- more than 97% measured test coverage;
+- Ruff formatting;
+- Ruff static analysis.
+
+### Delivered container baseline
+
 - multi-stage Docker build;
+- small Python slim runtime image;
+- isolated virtual environment;
 - non-root runtime user;
-- container health check and local smoke validation.
+- controlled file ownership;
+- container health check;
+- explicit Uvicorn startup command;
+- local build validation;
+- local runtime smoke testing.
 
-### Delivered CI baseline
+### Delivered Continuous Integration baseline
 
-- pull-request and main-branch GitHub Actions triggers;
-- Python formatting, static analysis, tests, and coverage enforcement;
-- container build and runtime smoke checks;
+- Pull Request and main-branch workflow triggers;
+- Python dependency installation;
+- formatting validation;
+- static analysis;
+- automated tests;
+- coverage enforcement;
+- Docker image build;
+- container runtime smoke test;
 - recursive Terraform formatting validation;
-- matrix-based validation of the bootstrap and development root modules;
+- matrix-based Terraform validation;
+- bootstrap root-module validation;
+- development root-module validation;
 - read-only provider lock-file enforcement;
-- CI validation without access to Azure credentials.
+- CI validation without Azure credentials.
 
-### Delivered Terraform and Azure baseline
+### Delivered Terraform backend foundation
 
-- pinned Terraform and AzureRM provider versions;
-- environment-specific variables, locals, naming, tags, and outputs;
+- pinned Terraform version constraints;
+- pinned AzureRM provider constraints;
 - dedicated bootstrap root module;
-- Azure Resource Group for Terraform state infrastructure;
-- secure Standard LRS Storage Account in an allowed Azure region;
-- private Blob Container for state files;
-- Blob versioning and soft-delete recovery controls;
+- Terraform backend Resource Group;
+- Standard LRS Storage Account;
+- private Blob Container;
+- Blob versioning;
+- soft-delete recovery controls;
 - shared-key access disabled;
-- Microsoft Entra ID data-plane authentication;
-- least-privilege Storage Blob Data Contributor role assignment;
+- Microsoft Entra ID authentication;
+- least-privilege role assignment;
 - partial AzureRM backend configuration;
-- remote development state stored under `dev/terraform.tfstate`;
+- development state stored under `dev/terraform.tfstate`;
 - Azure Blob lease-based state locking;
-- reviewed plans and pull-request-based infrastructure changes.
+- remote-state recovery procedures;
+- backend-aware CI validation.
 
-### Implemented control-plane flow
+### Delivered Development Network Foundation
+
+- reusable Terraform network module;
+- development Resource Group;
+- Virtual Network with a `/16` address space;
+- six segmented subnets;
+- six Network Security Groups;
+- six subnet-to-NSG associations;
+- Azure Container Apps subnet delegation;
+- deterministic naming;
+- common project tags;
+- sanitized Terraform outputs;
+- remote Terraform state;
+- successful Terraform validation;
+- reviewed Terraform plan;
+- successful Azure deployment;
+- post-deployment Portal verification;
+- drift detection with detailed exit code `0`;
+- sanitized deployment evidence.
+
+### Current control-plane flow
+
+```mermaid
+flowchart LR
+    Engineer["Engineer"] --> GitHub["GitHub Repository"]
+    GitHub --> Actions["GitHub Actions"]
+    Engineer --> Terraform["Terraform CLI"]
+
+    Actions --> Validation["Tests and Validation"]
+    Terraform --> Azure["Azure Control Plane"]
+    Terraform --> Backend["Azure Blob Remote State"]
+
+    Backend --> Lock["State Locking"]
+    Backend --> Recovery["Versioning and Recovery"]
+    Azure --> Network["Development Network Foundation"]
+```
+
+### Current platform state
 
 ```mermaid
 flowchart TD
-    Engineer["Engineer"] --> GitHub["GitHub and CI"]
-    Engineer --> Terraform["Terraform CLI"]
-    Terraform --> Azure["Azure control plane"]
-    Terraform --> Backend["Azure Blob remote state"]
-    Backend --> Lock["State locking and recovery"]
+    RG["Resource Group<br/>rg-aeplab-platform-dev"] --> VNet["Virtual Network<br/>vnet-aeplab-platform-dev<br/>10.20.0.0/16"]
+
+    VNet --> ACA["Container Apps Subnet<br/>10.20.0.0/23"]
+    VNet --> APIM["API Management Subnet<br/>10.20.2.0/24"]
+    VNet --> App["Application Subnet<br/>10.20.3.0/24"]
+    VNet --> Data["Data Subnet<br/>10.20.4.0/24"]
+    VNet --> PE["Private Endpoints Subnet<br/>10.20.5.0/24"]
+    VNet --> Mgmt["Management Subnet<br/>10.20.6.0/24"]
+
+    ACA --> NSG1["NSG"]
+    APIM --> NSG2["NSG"]
+    App --> NSG3["NSG"]
+    Data --> NSG4["NSG"]
+    PE --> NSG5["NSG"]
+    Mgmt --> NSG6["NSG"]
+
+    ACA --> Delegation["Microsoft.App/environments<br/>Subnet Delegation"]
 ```
 
-The next implementation step is the Development Network Foundation: a reusable Terraform network module, development Resource Group, Virtual Network, segmented subnets, Network Security Groups, reviewed deployment plan, and post-deployment verification.
+The next implementation phase introduces Azure Container Registry and Azure Container Apps while preserving strict cost controls.
 
 ---
 
 ## Engineering objectives
 
-The project is designed to demonstrate the following engineering capabilities:
+The project is designed to demonstrate the following Cloud Engineer, DevOps Engineer, Platform Engineer, and SRE capabilities:
 
-- Azure resource organization and governance;
-- Infrastructure as Code with Terraform;
-- reusable Terraform module development;
-- remote Terraform state management;
-- Azure networking and private connectivity;
+- Azure resource organization;
+- Infrastructure as Code;
+- reusable Terraform modules;
+- Terraform remote state;
+- Terraform state locking;
+- Azure networking;
+- network segmentation;
 - identity-first security;
-- Microsoft Entra ID integration;
-- managed identities and workload identity;
-- Azure Key Vault secret management;
+- Microsoft Entra ID;
+- Azure RBAC;
+- managed identities;
+- workload identity;
+- Azure Key Vault;
 - container image engineering;
 - Azure Container Registry;
 - Azure Container Apps;
 - Azure API Management;
 - Azure Database for PostgreSQL;
-- Azure Storage;
-- GitHub Actions CI/CD;
-- OpenID Connect authentication from GitHub to Azure;
-- Kubernetes and Azure Kubernetes Service;
-- Helm packaging;
+- Azure Blob Storage;
+- GitHub Actions;
+- OpenID Connect federation;
+- Azure Kubernetes Service;
+- Helm;
 - GitOps;
-- monitoring and distributed tracing;
+- progressive delivery;
+- Azure Monitor;
+- Application Insights;
+- OpenTelemetry;
 - Kusto Query Language;
-- SLI, SLO, and error-budget concepts;
-- load testing and scaling;
-- incident response and troubleshooting;
+- SLI and SLO design;
+- error budgets;
+- load testing;
+- scaling;
+- incident response;
+- troubleshooting;
 - backup and restore;
-- disaster-recovery planning;
-- cloud cost control and FinOps.
+- disaster recovery;
+- cloud cost control;
+- FinOps.
 
 ---
 
 ## Architecture
 
-The final target architecture is implemented in multiple cost-controlled phases.
+The final target architecture is implemented through multiple cost-controlled phases.
 
 ```mermaid
 flowchart TD
-    Client["API client"] --> APIM["Azure API Management"]
+    Client["API Client"] --> APIM["Azure API Management"]
 
     APIM --> ACA["Azure Container Apps"]
     APIM -. "Advanced phase" .-> AKS["Azure Kubernetes Service"]
@@ -160,11 +336,11 @@ flowchart TD
     ACA --> PostgreSQL["Azure Database for PostgreSQL"]
     AKS --> PostgreSQL
 
-    ACA --> Storage["Azure Storage"]
+    ACA --> Storage["Azure Blob Storage"]
     AKS --> Storage
 
     GitHub["GitHub Actions"] --> Terraform["Terraform"]
-    Terraform --> Azure["Azure control plane"]
+    Terraform --> Azure["Azure Control Plane"]
 
     GitHub --> ACR["Azure Container Registry"]
     ACR --> ACA
@@ -185,20 +361,79 @@ flowchart TD
 
 ### Architecture layers
 
-The platform is divided into the following logical layers:
-
 | Layer | Responsibilities |
 |---|---|
 | Edge and API | API publishing, authentication, throttling, versioning, transformations, and routing |
 | Application | FastAPI application, business logic, health endpoints, and telemetry |
 | Container platform | Container Apps baseline and AKS advanced runtime |
 | Data | PostgreSQL, Blob Storage, backup, and recovery |
-| Identity | Entra ID, RBAC, managed identities, and workload identity |
-| Security | Key Vault, private access, policies, scanning, and least privilege |
+| Identity | Entra ID, RBAC, managed identities, workload identity, and OIDC |
+| Security | Key Vault, private access, policy, scanning, and least privilege |
+| Networking | VNet, subnets, NSGs, delegation, DNS, routes, and private endpoints |
 | Delivery | GitHub Actions, Terraform, Docker, ACR, Helm, and GitOps |
-| Observability | Azure Monitor, Log Analytics, Application Insights, OpenTelemetry, and KQL |
-| Reliability | Health probes, autoscaling, rollback, backup, restore, and disaster recovery |
-| Governance | Naming, tags, budgets, policy, locks, ownership, and cleanup |
+| Observability | Azure Monitor, Application Insights, OpenTelemetry, and KQL |
+| Reliability | Health probes, autoscaling, rollback, backup, restore, and recovery |
+| Governance | Naming, tags, budgets, policies, ownership, and cleanup |
+
+---
+
+## Deployed development network
+
+The Development Network Foundation has been deployed in `Poland Central`.
+
+### Resource Group
+
+```text
+rg-aeplab-platform-dev
+```
+
+### Virtual Network
+
+```text
+Name:          vnet-aeplab-platform-dev
+Address space: 10.20.0.0/16
+Region:        Poland Central
+```
+
+### Subnet address plan
+
+| Purpose | Azure name | CIDR | NSG | Delegation |
+|---|---|---|---|---|
+| Container Apps | `snet-container-apps-dev` | `10.20.0.0/23` | `nsg-container-apps-dev` | `Microsoft.App/environments` |
+| API Management | `snet-api-management-dev` | `10.20.2.0/24` | `nsg-api-management-dev` | None |
+| Application | `snet-application-dev` | `10.20.3.0/24` | `nsg-application-dev` | None |
+| Data | `snet-data-dev` | `10.20.4.0/24` | `nsg-data-dev` | None |
+| Private Endpoints | `snet-private-endpoints-dev` | `10.20.5.0/24` | `nsg-private-endpoints-dev` | None |
+| Management | `snet-management-dev` | `10.20.6.0/24` | `nsg-management-dev` | None |
+
+### Deployed Terraform resources
+
+The development Terraform state currently contains twenty managed resources:
+
+- one Resource Group;
+- one Virtual Network;
+- six Subnets;
+- six Network Security Groups;
+- six Subnet-to-NSG associations.
+
+### Network documentation
+
+- [Development Network Architecture](docs/architecture/development-network.md)
+- [Development Network Deployment Evidence](docs/evidence/development-network-foundation.md)
+
+### Network validation results
+
+- Terraform initialization succeeded;
+- Terraform validation succeeded;
+- Terraform plan reported `20 to add, 0 to change, 0 to destroy`;
+- Terraform apply completed successfully;
+- Terraform state contains all twenty expected resources;
+- Azure Portal shows all six subnets;
+- all six Network Security Groups exist;
+- NSGs are associated with their expected subnets;
+- Container Apps delegation is configured;
+- post-deployment Terraform plan reports no changes;
+- Terraform detailed exit code is `0`.
 
 ---
 
@@ -210,47 +445,49 @@ The planned API request flow is:
 2. API Management validates the request.
 3. APIM applies authentication, rate limits, quotas, transformations, routing, and logging policies.
 4. The request is forwarded to the active application backend.
-5. The backend runs initially in Azure Container Apps.
+5. The initial backend runs in Azure Container Apps.
 6. During the advanced phase, the same application image is deployed to AKS.
 7. The application authenticates to Azure services through managed identity or workload identity.
 8. Secrets and certificates are retrieved from Azure Key Vault.
 9. Relational data is stored in Azure Database for PostgreSQL.
 10. Objects and application files are stored in Azure Blob Storage.
-11. Metrics, logs, traces, and dependency information are sent to Azure Monitor and Application Insights.
-12. The response returns through APIM to the client with a correlation ID.
+11. Metrics, logs, traces, and dependencies are sent to the observability platform.
+12. The response returns through APIM with a correlation ID.
 
 ---
 
 ## Deployment flow
 
-The planned delivery flow is:
+The target delivery flow is:
 
 ```mermaid
 flowchart TD
-    Commit["Git commit"] --> PR["Pull request"]
-    PR --> Validate["Tests and validation"]
-    Validate --> Scan["Security scanning"]
-    Scan --> Plan["Terraform plan"]
-    Plan --> Approval["Environment approval"]
-    Approval --> Apply["Terraform apply"]
-    Apply --> Build["Build container image"]
-    Build --> ACR["Push image to ACR"]
-    ACR --> Deploy["Deploy application"]
-    Deploy --> Verify["Smoke and integration tests"]
-    Verify --> Observe["Monitoring and rollback decision"]
+    Commit["Git Commit"] --> PR["Pull Request"]
+    PR --> Validate["Tests and Validation"]
+    Validate --> Scan["Security Scanning"]
+    Scan --> Plan["Terraform Plan"]
+    Plan --> Review["Plan Review"]
+    Review --> Approval["Environment Approval"]
+    Approval --> Apply["Terraform Apply"]
+    Apply --> Build["Build Container Image"]
+    Build --> ACR["Push Image to ACR"]
+    ACR --> Deploy["Deploy Application"]
+    Deploy --> Verify["Smoke and Integration Tests"]
+    Verify --> Observe["Monitoring and Rollback Decision"]
 ```
 
-A deployment is considered successful only when:
+A deployment is successful only when:
 
 - infrastructure deployment succeeds;
 - the expected application version is running;
 - health checks pass;
 - smoke tests pass;
-- authentication works;
+- required authentication works;
 - required dependencies are reachable;
 - monitoring receives telemetry;
-- no unexpected critical security finding is introduced;
-- deployment evidence is preserved.
+- no unexpected critical security issue is introduced;
+- deployment evidence is preserved;
+- the cost impact is reviewed.
 
 ---
 
@@ -262,7 +499,9 @@ A deployment is considered successful only when:
 | Infrastructure as Code | Terraform, AzureRM provider |
 | Native Azure IaC comparison | Bicep |
 | Application | Python, FastAPI |
+| Application server | Uvicorn |
 | Application testing | Pytest |
+| Static analysis | Ruff |
 | Containers | Docker |
 | Container registry | Azure Container Registry |
 | Serverless containers | Azure Container Apps |
@@ -277,13 +516,12 @@ A deployment is considered successful only when:
 | Object storage | Azure Blob Storage |
 | CI/CD | GitHub Actions |
 | Monitoring | Azure Monitor |
-| Log platform | Log Analytics |
 | Application monitoring | Application Insights |
 | Telemetry | OpenTelemetry |
 | Query language | Kusto Query Language |
 | Security scanning | Trivy and Checkov |
 | Load testing | k6 |
-| Documentation | Markdown, Mermaid, architecture diagrams, ADRs |
+| Documentation | Markdown, Mermaid, ADRs, runbooks, and evidence |
 
 The final tool selection may be refined through Architecture Decision Records.
 
@@ -294,15 +532,15 @@ The final tool selection may be refined through Architecture Decision Records.
 | Phase | Scope | Status |
 |---|---|---|
 | 0 | Repository, tooling, Git configuration, documentation, safety, and cost controls | Completed |
-| 1 | Local FastAPI application, unit tests, health endpoints, and Docker image | Completed |
-| 2 | Terraform fundamentals, provider configuration, bootstrap, and remote state | Completed |
-| 3 | Resource groups, naming, tags, policy, budgets, and governance | In progress |
-| 4 | Virtual networks, subnets, NSGs, routing, DNS, and private connectivity | Next |
-| 5 | Azure Container Registry and Azure Container Apps baseline | Planned |
+| 1 | FastAPI application, tests, health endpoints, and Docker image | Completed |
+| 2 | Terraform fundamentals, backend bootstrap, remote state, and state locking | Completed |
+| 3 | Naming, tags, budgets, policy, ownership, and governance | In progress |
+| 4 | Development VNet, CIDR design, subnets, NSGs, delegation, and deployment evidence | Completed |
+| 5 | Azure Container Registry and Azure Container Apps baseline | Next |
 | 6 | Managed identity, Key Vault, Storage, and PostgreSQL | Planned |
 | 7 | Azure API Management, OpenAPI, policies, security, and throttling | Planned |
-| 8 | GitHub Actions, OIDC, Terraform pipelines, and application CI/CD | In progress |
-| 9 | Azure Monitor, Log Analytics, Application Insights, OpenTelemetry, and KQL | Planned |
+| 8 | GitHub Actions, OIDC, Terraform pipelines, and application delivery | In progress |
+| 9 | Azure Monitor, Application Insights, OpenTelemetry, alerts, and KQL | Planned |
 | 10 | AKS, Helm, Kubernetes security, autoscaling, and persistent storage | Planned |
 | 11 | GitOps, progressive delivery, rollback, and drift detection | Planned |
 | 12 | Load testing, reliability, backup, restore, incident response, and FinOps | Planned |
@@ -310,11 +548,11 @@ The final tool selection may be refined through Architecture Decision Records.
 
 ### Phase status definitions
 
-- `Planned` - the phase has not started.
-- `In progress` - implementation or validation is currently active.
-- `Completed` - implementation, testing, documentation, evidence, and cleanup are complete.
-- `Next` - the phase is the next approved implementation target.
-- `Reference design` - the architecture is documented and validated without permanent deployment because of cost or subscription limitations.
+- `Planned` — the phase has not started.
+- `In progress` — implementation or validation is active.
+- `Completed` — implementation, testing, documentation, evidence, and verification are complete.
+- `Next` — the phase is the next approved implementation target.
+- `Reference design` — the architecture is documented and validated without permanent deployment because of cost or subscription limitations.
 
 ---
 
@@ -344,23 +582,25 @@ The final tool selection may be refined through Architecture Decision Records.
 │   ├── architecture/
 │   │   └── Architecture diagrams and design documents
 │   ├── evidence/
-│   │   └── Sanitized deployment and validation evidence
+│   │   ├── screenshots/
+│   │   │   └── development-network/
+│   │   └── Sanitized deployment evidence
 │   └── runbooks/
 │       └── Operational and troubleshooting procedures
 ├── helm/
 │   └── Application Helm charts
 ├── infrastructure/
 │   ├── bootstrap/
-│   │   └── Terraform state backend bootstrap
+│   │   └── Terraform backend bootstrap
 │   ├── environments/
 │   │   ├── dev/
 │   │   ├── staging/
 │   │   └── production/
 │   └── modules/
-│       └── Reusable Terraform modules
+│       ├── network/
+│       └── Future reusable Terraform modules
 ├── kubernetes/
 │   ├── base/
-│   │   └── Common Kubernetes manifests
 │   └── overlays/
 │       ├── dev/
 │       ├── staging/
@@ -372,12 +612,10 @@ The final tool selection may be refined through Architecture Decision Records.
 │   └── Safe helper and validation scripts
 └── tests/
     ├── integration/
-    │   └── Integration tests
     └── smoke/
-        └── Post-deployment smoke tests
 ```
 
-Empty directories contain temporary `.gitkeep` files. These files are removed when real files are added.
+Empty directories may contain temporary `.gitkeep` files. These files are removed when real implementation files are added.
 
 ---
 
@@ -385,25 +623,43 @@ Empty directories contain temporary `.gitkeep` files. These files are removed wh
 
 Terraform is the primary provisioning tool.
 
-The infrastructure code is separated into reusable modules and environment-specific root modules. The bootstrap and development root modules are already implemented; reusable service modules are introduced incrementally.
+Infrastructure code is separated into:
 
-Planned modules include:
+- reusable Terraform modules;
+- environment-specific root modules;
+- backend bootstrap configuration;
+- environment-specific variable values;
+- versioned provider lock files.
+
+### Implemented reusable modules
+
+The network module currently manages:
+
+- Virtual Network;
+- Subnets;
+- Subnet Delegation;
+- Network Security Groups;
+- optional NSG rules;
+- Subnet-to-NSG associations;
+- sanitized outputs.
+
+### Planned reusable modules
+
+Future modules include:
 
 - resource naming;
-- governance and tags;
-- virtual network;
-- network security groups;
+- governance;
 - private DNS;
 - private endpoints;
 - storage accounts;
-- container registry;
-- container apps;
+- Azure Container Registry;
+- Azure Container Apps;
 - managed identities;
-- Key Vault;
+- Azure Key Vault;
 - PostgreSQL;
-- API Management;
+- Azure API Management;
 - monitoring;
-- AKS;
+- Azure Kubernetes Service;
 - role assignments.
 
 ### Terraform workflow
@@ -418,35 +674,46 @@ terraform plan
 review
 terraform apply
 verify
-terraform destroy
-verify cleanup
+drift check
+cost review
 ```
 
-No infrastructure change is considered complete until the deployed state is validated.
+No infrastructure change is complete until the deployed state has been validated.
 
 ### Terraform state
 
-The development environment uses a dedicated Azure Storage backend. The backend was created by the separate bootstrap root module and is accessed through Microsoft Entra ID rather than Storage Account keys.
+The development environment uses a dedicated Azure Storage backend.
 
-The backend will be protected through:
+The backend was created by the separate bootstrap root module and is accessed through Microsoft Entra ID rather than Storage Account keys.
 
-- restricted access;
-- encryption;
-- versioning and recovery controls;
-- dedicated identity permissions;
-- separate state per environment;
+Backend protections include:
+
+- private Blob Container;
+- encryption at rest;
+- Blob versioning;
+- soft-delete recovery;
+- shared-key access disabled;
+- Entra ID authentication;
+- least-privilege RBAC;
+- separate state keys;
 - state locking;
 - no state files committed to Git.
 
-Terraform state may contain sensitive values and must be treated as protected data.
+The bootstrap state remains local and protected because it manages the remote-state infrastructure itself.
 
-The bootstrap state remains local and protected while it manages the remote-state infrastructure itself. Development state is stored remotely under a separate Blob key and uses Azure-native state locking.
+The development environment state is stored remotely under:
+
+```text
+dev/terraform.tfstate
+```
+
+Terraform state may contain sensitive values and must be treated as protected data.
 
 ---
 
 ## Environment strategy
 
-The project contains three logical environments:
+The project contains three logical environments.
 
 ### Development
 
@@ -455,10 +722,12 @@ The development environment is the primary real deployment environment.
 It uses:
 
 - low-cost service tiers;
-- short retention;
-- small scaling limits;
-- automatic or manual cleanup;
-- active troubleshooting and testing.
+- short retention periods;
+- small scaling boundaries;
+- scale-to-zero where supported;
+- manual or automated cleanup;
+- active troubleshooting;
+- real deployment evidence.
 
 ### Staging
 
@@ -470,7 +739,8 @@ It is deployed only when required for:
 - migration testing;
 - API compatibility testing;
 - progressive delivery;
-- rollback testing.
+- rollback testing;
+- disaster-recovery exercises.
 
 ### Production
 
@@ -478,7 +748,7 @@ The production directory represents the intended production architecture.
 
 It may include configurations that are too expensive to operate continuously under an Azure for Students subscription.
 
-Production configurations are validated through:
+Production configurations may be validated through:
 
 - Terraform formatting;
 - Terraform validation;
@@ -494,39 +764,84 @@ Each environment uses separate configuration, state, deployment permissions, and
 
 ## Networking strategy
 
-The networking implementation is the current active platform phase and progresses from basic segmentation to advanced private connectivity.
+The initial Development Network Foundation is deployed and verified.
+
+### Implemented network capabilities
+
+- deterministic CIDR planning;
+- reusable Terraform network module;
+- development Virtual Network;
+- six purpose-specific subnets;
+- six Network Security Groups;
+- six subnet-to-NSG associations;
+- Container Apps environment delegation;
+- centralized naming;
+- centralized tagging;
+- sanitized outputs;
+- deployment evidence;
+- post-deployment drift detection.
+
+### Address allocation
+
+The VNet uses:
+
+```text
+10.20.0.0/16
+```
+
+The currently allocated subnet ranges occupy only part of the `/16` address space. This leaves capacity for future platform services and controlled expansion.
+
+### Segmentation principles
+
+Separate subnets exist for:
+
+- Container Apps;
+- API Management;
+- application workloads;
+- data services;
+- private endpoints;
+- management workloads.
+
+This prevents unrelated workloads from sharing one unrestricted network segment and prepares the platform for more advanced security policies.
+
+### Future network capabilities
 
 Planned networking topics include:
 
-- virtual network design;
-- CIDR planning;
-- subnet segmentation;
-- Network Security Groups;
+- explicit NSG security rules;
 - application security groups;
 - user-defined routes;
-- public and private IP addressing;
 - private endpoints;
-- service endpoints;
 - private DNS zones;
+- service endpoints;
 - VNet peering;
-- hub-and-spoke topology;
+- hub-and-spoke architecture;
 - controlled ingress and egress;
-- NAT concepts;
+- NAT design;
+- Azure Firewall reference design;
 - Application Gateway and WAF reference design;
-- Network Watcher troubleshooting;
+- Network Watcher diagnostics;
 - private AKS architecture.
 
-The initial development deployment prioritizes resources without standing hourly charges: Resource Groups, Virtual Networks, Subnets, and Network Security Groups. Chargeable components such as NAT Gateway, Application Gateway, private endpoints, and advanced firewall services require a separate cost review before deployment.
+### Cost boundary
 
-The final network design follows least-access principles.
+The initial network foundation intentionally avoids standing chargeable network components such as:
 
-Application, data, management, ingress, and private-endpoint responsibilities are separated where technically and financially practical.
+- NAT Gateway;
+- Application Gateway;
+- Azure Firewall;
+- VPN Gateway;
+- ExpressRoute Gateway;
+- unnecessary Public IP addresses;
+- unnecessary Private Endpoints.
+
+Any chargeable network component requires a separate architecture and cost review before deployment.
 
 ---
 
 ## Identity and security
 
-The project follows an identity-first and Zero Trust approach.
+The project follows identity-first and Zero Trust principles.
 
 ### Human access
 
@@ -547,14 +862,14 @@ Workloads use:
 - user-assigned managed identities where reuse is justified;
 - AKS workload identity;
 - GitHub Actions OIDC federation;
-- short-lived tokens;
+- short-lived access tokens;
 - narrowly scoped Azure role assignments.
 
-Long-lived Azure client secrets are avoided wherever supported.
+Long-lived Azure client secrets are avoided wherever possible.
 
 ### Secret management
 
-Azure Key Vault stores:
+Azure Key Vault will store:
 
 - application secrets;
 - database credentials where identity-based access is unavailable;
@@ -565,14 +880,14 @@ Secrets must never be stored in:
 
 - Git;
 - Docker images;
-- Terraform variable files committed to Git;
+- committed Terraform variable files;
 - GitHub Actions logs;
 - screenshots;
 - application source code.
 
 ### Security controls
 
-Planned controls include:
+Implemented and planned controls include:
 
 - least-privilege RBAC;
 - managed identity;
@@ -587,20 +902,19 @@ Planned controls include:
 - Kubernetes security contexts;
 - Kubernetes Network Policies;
 - controlled logging;
-- documented threat models.
+- threat modelling.
 
 ---
 
 ## API management
 
-Azure API Management is the central API gateway.
+Azure API Management is the planned central API gateway.
 
 The APIM phase includes:
 
 - OpenAPI import;
 - API operations;
-- API products;
-- subscriptions;
+- products and subscriptions;
 - API versioning;
 - JWT validation;
 - Microsoft Entra ID integration;
@@ -613,17 +927,17 @@ The APIM phase includes:
 - URL rewriting;
 - backend routing;
 - caching;
-- retries;
+- retry policies;
 - controlled error handling;
 - correlation IDs;
-- Application Insights integration;
+- telemetry integration;
 - policy-as-code deployment.
 
-The real laboratory deployment uses a cost-appropriate APIM tier.
+The laboratory deployment will use a cost-appropriate APIM tier after a separate pricing and regional availability review.
 
-Advanced private and enterprise APIM designs are documented separately when their permanent cost or tier requirements are not suitable for the student subscription.
+Advanced enterprise APIM designs may be documented as reference architectures if their permanent cost is not appropriate for the student subscription.
 
-The backend application remains responsible for business authorization and data integrity. APIM does not replace application security.
+The backend application remains responsible for business authorization and data integrity. APIM does not replace application-level security.
 
 ---
 
@@ -634,38 +948,60 @@ The backend application remains responsible for business authorization and data 
 The application container follows these principles:
 
 - deterministic dependencies;
-- multi-stage build where useful;
+- multi-stage build;
 - small build context;
 - non-root runtime user;
 - explicit health endpoint;
 - graceful shutdown;
 - no embedded secrets;
-- immutable image version;
-- image vulnerability scanning;
+- immutable image versions;
+- vulnerability scanning;
 - deployment by image digest where practical.
+
+### Azure Container Registry
+
+The next phase introduces Azure Container Registry.
+
+The implementation will include:
+
+- cost-appropriate registry SKU;
+- Terraform-managed registry;
+- admin credentials disabled;
+- Microsoft Entra ID authentication;
+- deterministic image naming;
+- semantic or commit-based image tags;
+- image push validation;
+- image metadata evidence;
+- lifecycle and cleanup considerations;
+- vulnerability scanning strategy.
 
 ### Azure Container Apps
 
-Azure Container Apps provides the initial low-cost application runtime.
+Azure Container Apps provides the initial managed application runtime.
 
-The implementation includes:
+The implementation will include:
 
-- revisions;
+- Container Apps Managed Environment;
+- integration with `snet-container-apps-dev`;
+- FastAPI container deployment;
 - ingress;
-- managed identity;
-- Key Vault access;
+- revisions;
 - health probes;
-- scale-to-zero;
-- autoscaling boundaries;
-- traffic splitting;
-- rollback;
-- monitoring.
+- minimum replicas set to zero where appropriate;
+- bounded maximum replicas;
+- CPU and memory limits;
+- managed identity;
+- registry authentication without passwords;
+- smoke testing;
+- revision-based rollback;
+- sanitized deployment evidence;
+- post-deployment cost review.
 
 ### Azure Kubernetes Service
 
 AKS provides the advanced orchestration phase.
 
-The AKS implementation includes:
+The AKS implementation will include:
 
 - cluster and node-pool architecture;
 - namespaces;
@@ -691,30 +1027,43 @@ The AKS implementation includes:
 - GitOps;
 - rollback.
 
-AKS is created only for controlled laboratory periods and destroyed after validation.
+AKS will be created only during controlled laboratory windows and destroyed after validation.
 
 ---
 
 ## CI/CD strategy
 
-GitHub Actions provides the delivery platform. Application CI and Terraform formatting and validation are already active. Azure deployment through GitHub OIDC remains a later implementation step.
+GitHub Actions provides the delivery platform.
 
-Implemented and planned workflows include:
+Application CI and Terraform validation are active. Azure delivery through GitHub OIDC remains a later implementation step.
 
-- pull request validation;
-- Python linting and testing;
+### Implemented CI capabilities
+
+- Pull Request validation;
+- main-branch validation;
+- Python formatting;
+- Python static analysis;
+- application tests;
+- coverage enforcement;
 - Docker image build;
+- runtime smoke test;
+- recursive Terraform formatting;
+- Terraform validation matrix;
+- provider lock-file validation;
+- CI operation without Azure credentials.
+
+### Planned CI/CD capabilities
+
 - dependency scanning;
 - container vulnerability scanning;
 - SBOM generation;
-- Terraform formatting;
-- Terraform validation;
 - Terraform security scanning;
-- Terraform plan;
+- Terraform plan publishing;
 - protected Terraform apply;
-- APIM policy deployment;
-- container image publishing;
+- GitHub OIDC authentication;
+- image publishing to ACR;
 - Container Apps deployment;
+- APIM policy deployment;
 - AKS deployment;
 - smoke tests;
 - integration tests;
@@ -725,20 +1074,20 @@ Implemented and planned workflows include:
 
 GitHub Actions will authenticate to Azure through OpenID Connect.
 
-The OIDC design avoids storing a long-lived Azure client secret in GitHub.
+OIDC avoids storing a long-lived Azure client secret in GitHub.
 
-Separate identities and permissions will be used for:
+Separate identities and permissions will be considered for:
 
-- pull request validation;
+- Pull Request validation;
 - development deployment;
 - production deployment;
 - cleanup operations.
 
 ### Deployment strategies
 
-The project demonstrates:
+The project will demonstrate:
 
-- rolling deployments;
+- rolling deployment;
 - revision-based rollback;
 - canary deployment;
 - traffic splitting;
@@ -750,7 +1099,7 @@ The project demonstrates:
 
 ## Observability and SRE
 
-The observability implementation includes four main telemetry types:
+The observability implementation includes four telemetry categories:
 
 - metrics;
 - logs;
@@ -760,8 +1109,8 @@ The observability implementation includes four main telemetry types:
 Planned services and technologies include:
 
 - Azure Monitor;
-- Log Analytics;
 - Application Insights;
+- Log Analytics where justified;
 - OpenTelemetry;
 - diagnostic settings;
 - KQL;
@@ -773,7 +1122,7 @@ Planned services and technologies include:
 
 ### Service-level concepts
 
-The project defines learning examples of:
+The project includes examples of:
 
 - Service Level Indicators;
 - Service Level Objectives;
@@ -785,15 +1134,15 @@ The project defines learning examples of:
 - saturation;
 - incident severity.
 
-Monitoring is designed to answer:
+Monitoring should answer:
 
 - Which environment is affected?
-- Which version is running?
+- Which application version is running?
 - Which API operation failed?
 - Which dependency caused the failure?
 - When did the problem begin?
 - Was the failure related to a deployment?
-- How many users or requests were affected?
+- How many requests were affected?
 - Is the error budget being consumed too quickly?
 
 ---
@@ -802,7 +1151,9 @@ Monitoring is designed to answer:
 
 Reliability work includes:
 
-- readiness and health validation;
+- readiness validation;
+- liveness validation;
+- startup probes;
 - bounded retries;
 - timeouts;
 - backoff and jitter;
@@ -819,12 +1170,12 @@ Reliability work includes:
 
 ### Recovery objectives
 
-The project documents:
+The project will document:
 
 - Recovery Time Objective;
 - Recovery Point Objective;
 - backup retention;
-- restore procedure;
+- restore procedures;
 - infrastructure reconstruction;
 - application redeployment;
 - data recovery;
@@ -843,27 +1194,43 @@ The project uses a limited Azure for Students credit balance.
 
 Cost is treated as an engineering requirement.
 
-The current persistent Azure footprint is limited to the Terraform remote-state foundation: one Resource Group, one Standard LRS Storage Account, one private Blob Container, and one role assignment. The network foundation is selected next because Resource Groups, Virtual Networks, Subnets, and Network Security Groups do not introduce the standing compute cost of application runtimes, gateways, or managed databases.
+### Current persistent footprint
+
+The current persistent Azure footprint consists of:
+
+- Terraform backend Resource Group;
+- Standard LRS Storage Account;
+- private Terraform state Blob Container;
+- Terraform backend role assignment;
+- development Resource Group;
+- development Virtual Network;
+- six Subnets;
+- six Network Security Groups;
+- six subnet-to-NSG associations.
+
+The network foundation does not currently include standing compute services, managed gateways, databases, public IP addresses, or permanent monitoring ingestion.
 
 ### Cost-control rules
 
-- Use consumption-based or free tiers where suitable.
-- Keep minimum replica counts at zero where supported.
-- Use small development SKUs.
-- Deploy expensive resources only during active laboratories.
-- Destroy AKS after the validation window.
-- Avoid permanent Application Gateway, NAT Gateway, or duplicate regional environments unless required.
-- Use short log-retention periods in development.
-- Limit autoscaling maximums.
-- Apply project, environment, owner, and expiration tags.
-- Review Cost Management after every deployment phase.
-- Check for orphaned disks, public IPs, snapshots, private endpoints, and monitoring resources.
-- Verify Terraform destruction.
-- Preserve a credit reserve for later advanced phases.
+- use consumption-based or free tiers where appropriate;
+- use small development SKUs;
+- use minimum replica count `0` where supported;
+- limit maximum replica count;
+- deploy expensive resources only during active laboratories;
+- destroy AKS after validation;
+- avoid permanent Application Gateway, NAT Gateway, or Firewall deployments unless required;
+- avoid unnecessary Public IP addresses;
+- use short monitoring retention;
+- apply project, environment, purpose, and ownership tags;
+- review Cost Management after each deployment phase;
+- check for orphaned resources;
+- verify Terraform destruction;
+- preserve a credit reserve for advanced phases;
+- conduct a pricing review before deploying a new Azure service.
 
 ### Important budget limitation
 
-Azure budgets provide alerts but do not automatically stop resources.
+Azure budgets generate alerts but do not automatically stop or delete resources.
 
 A successful `terraform destroy` must be followed by verification that no unexpected chargeable resources remain.
 
@@ -875,40 +1242,45 @@ The project applies multiple testing levels.
 
 ### Application tests
 
-- unit tests;
-- input validation tests;
-- authentication tests;
-- authorization tests;
-- error-handling tests.
+- endpoint behavior;
+- response schemas;
+- input validation;
+- correlation IDs;
+- configuration behavior;
+- error handling;
+- health endpoints.
 
 ### Infrastructure tests
 
 - `terraform fmt`;
 - `terraform validate`;
-- Terraform plan review;
 - provider version validation;
+- provider lock-file validation;
+- Terraform plan review;
 - static analysis;
 - security scanning;
-- policy checks;
-- deployment verification.
+- deployment verification;
+- drift detection.
 
 ### Container tests
 
 - image build;
-- startup test;
-- health test;
-- non-root validation;
+- container startup;
+- health endpoint;
+- non-root runtime;
 - vulnerability scanning;
 - dependency scanning.
 
 ### Integration tests
 
-- APIM to application communication;
-- application to PostgreSQL communication;
-- application to Blob Storage communication;
+- ACR authentication;
+- Container Apps image pull;
+- APIM-to-application communication;
+- application-to-PostgreSQL communication;
+- application-to-Blob-Storage communication;
 - managed identity access;
 - Key Vault access;
-- monitoring telemetry delivery.
+- telemetry delivery.
 
 ### Smoke tests
 
@@ -916,10 +1288,10 @@ Smoke tests verify critical behavior immediately after deployment:
 
 - health endpoint;
 - API availability;
+- expected application version;
+- expected response schema;
 - valid authentication;
-- expected response;
-- database connectivity;
-- storage connectivity;
+- dependency connectivity;
 - telemetry generation.
 
 ### Reliability tests
@@ -940,48 +1312,50 @@ Smoke tests verify critical behavior immediately after deployment:
 
 The repository documents reproducible troubleshooting scenarios.
 
-Planned scenarios include:
+### Completed troubleshooting exercises
+
+- Docker daemon permission correction;
+- Dockerfile parse-error correction;
+- incorrect Python module startup path;
+- missing Python test dependencies;
+- missing Pytest fixture;
+- Ruff import-order failure;
+- CI type-annotation failure;
+- backend-aware Terraform CI failure;
+- Terraform backend reinitialization;
+- Terraform sensitivity propagation;
+- partial Terraform apply recovery;
+- Azure Policy rejection of a disallowed region;
+- separation of Resource Group and Storage Account regions;
+- empty Pull Request caused by missing commits;
+- safe Terraform recovery plan with zero destroy actions.
+
+### Planned troubleshooting exercises
 
 - incorrect Azure RBAC assignment;
 - expired or invalid credential;
 - OIDC subject mismatch;
 - Key Vault access denied;
-- public access incorrectly enabled;
 - NSG traffic denied;
 - incorrect route;
 - private DNS resolution failure;
 - private endpoint misconfiguration;
 - Terraform state lock;
-- partial Terraform apply;
 - unexpected Terraform replacement;
-- Docker build failure;
-- container health-check failure;
-- Kubernetes `Pending` pod;
+- container image-pull failure;
+- Container Apps revision failure;
+- Kubernetes `Pending` Pod;
 - Kubernetes `CrashLoopBackOff`;
 - Kubernetes `ImagePullBackOff`;
-- readiness-probe failure;
 - APIM `401 Unauthorized`;
 - APIM `403 Forbidden`;
 - APIM `429 Too Many Requests`;
-- APIM backend `5xx` failure;
+- APIM backend `5xx`;
 - PostgreSQL connection-pool exhaustion;
 - failed GitHub Actions deployment;
-- unavailable backend during rollout;
 - incomplete cleanup.
 
-Completed troubleshooting exercises already include:
-
-- recovery from a partial Terraform apply;
-- Azure Policy rejection of a disallowed deployment region;
-- separation of Resource Group and Storage Account regions;
-- propagation of Terraform sensitivity through derived values;
-- Dockerfile parse-error correction;
-- missing Python test fixture diagnosis;
-- CI lint failure diagnosis and correction;
-- backend-aware CI validation failure diagnosis;
-- safe recovery-plan generation with zero destroy actions.
-
-Each troubleshooting document contains:
+Each troubleshooting document should contain:
 
 1. Symptom.
 2. Expected behavior.
@@ -1000,13 +1374,32 @@ Each troubleshooting document contains:
 
 Each completed phase provides sanitized evidence.
 
-Evidence may include:
+### Completed evidence packages
 
-- Terraform output;
-- Terraform plans without secrets;
+- [Development Network Architecture](docs/architecture/development-network.md)
+- [Development Network Deployment Evidence](docs/evidence/development-network-foundation.md)
+
+The Development Network evidence demonstrates:
+
+- twenty resources in Terraform state;
+- zero post-deployment drift;
+- deployed VNet address space;
+- six deployed subnets;
+- Container Apps subnet delegation;
+- six deployed Network Security Groups;
+- subnet-to-NSG association.
+
+### Future evidence
+
+Future evidence may include:
+
+- Terraform plans;
+- Terraform outputs;
 - GitHub Actions results;
-- application test output;
+- test coverage;
 - Docker image information;
+- ACR image metadata;
+- Container Apps revisions;
 - API responses;
 - APIM policy tests;
 - Kubernetes object status;
@@ -1016,27 +1409,31 @@ Evidence may include:
 - load-test results;
 - backup and restore results;
 - incident timelines;
-- cost review;
+- cost reviews;
 - cleanup verification.
+
+### Evidence safety
 
 Evidence must not contain:
 
 - passwords;
 - tokens;
 - personal email addresses;
-- subscription identifiers where unnecessary;
-- tenant identifiers where unnecessary;
-- private IP information that should not be public;
+- unnecessary subscription identifiers;
+- unnecessary tenant identifiers;
+- private keys;
 - private certificates;
 - Terraform state;
+- Storage Account keys;
+- SAS tokens;
 - sensitive application data.
 
-Documentation is organized as follows:
+### Documentation structure
 
-- `docs/architecture/` - architecture and design;
-- `docs/adr/` - architecture decisions;
-- `docs/runbooks/` - operational procedures;
-- `docs/evidence/` - sanitized verification evidence.
+- `docs/architecture/` — architecture and design;
+- `docs/adr/` — Architecture Decision Records;
+- `docs/runbooks/` — operational and troubleshooting procedures;
+- `docs/evidence/` — sanitized verification evidence.
 
 ---
 
@@ -1049,11 +1446,11 @@ The project follows these provisioning rules:
 3. Azure CLI is optional and is not the primary provisioning method.
 4. Azure CLI may be used for authentication, read-only inspection, or diagnostics when it works reliably.
 5. Manual Portal changes must be documented.
-6. A manually created resource must either be imported into Terraform or explicitly excluded from Terraform ownership.
-7. Infrastructure changes require validation and plan review.
+6. A manually created resource must be imported into Terraform or explicitly excluded from Terraform ownership.
+7. Infrastructure changes require formatting, validation, and plan review.
 8. Temporary resources must have a cleanup procedure.
-9. Destructive actions require explicit target verification.
-10. No deployment is complete until functionality and cost state are verified.
+9. Destructive operations require explicit target verification.
+10. No deployment is complete until functionality, drift, and cost state are verified.
 
 This strategy keeps the project reproducible while accounting for local Azure CLI reliability limitations.
 
@@ -1064,13 +1461,14 @@ This strategy keeps the project reproducible while accounting for local Azure CL
 The following files and values must never be committed:
 
 - `.env`;
-- Terraform state;
+- Terraform state files;
 - real `.tfvars` files;
+- backend configuration containing sensitive values;
 - Azure client secrets;
 - GitHub tokens;
 - database passwords;
 - private keys;
-- certificates containing private keys;
+- private certificates;
 - Kubernetes kubeconfig files;
 - Key Vault secret values;
 - Storage Account keys;
@@ -1092,7 +1490,133 @@ git log -1 --stat
 git status
 ```
 
-If a secret is committed, deleting it in a later commit is not sufficient. The secret must be revoked or rotated immediately, and repository history must be reviewed.
+If a secret is committed, deleting it in a later commit is not sufficient.
+
+The secret must be revoked or rotated immediately, and repository history must be reviewed.
+
+---
+
+## Local development
+
+### Requirements
+
+- Git;
+- Python 3.13 or compatible supported version;
+- Docker;
+- Terraform;
+- GitHub CLI;
+- an Azure subscription for real deployment phases.
+
+### Clone the repository
+
+```bash
+git clone https://github.com/Morgein/azure-enterprise-platform-lab.git
+cd azure-enterprise-platform-lab
+```
+
+### Create the Python environment
+
+```bash
+cd application
+
+python3 -m venv .venv
+source .venv/bin/activate
+
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+```
+
+### Run validation
+
+```bash
+ruff format --check .
+ruff check .
+python -m pytest
+```
+
+### Run tests with coverage
+
+```bash
+python -m pytest \
+  --cov=azure_platform_api \
+  --cov-report=term-missing
+```
+
+### Run the application
+
+```bash
+python -m uvicorn azure_platform_api.main:app --reload
+```
+
+Application endpoints:
+
+```text
+http://127.0.0.1:8000/docs
+http://127.0.0.1:8000/health/live
+http://127.0.0.1:8000/health/ready
+http://127.0.0.1:8000/api/v1/info
+```
+
+A `404 Not Found` response for `/` is expected unless a root endpoint is explicitly implemented.
+
+### Build the container image
+
+```bash
+docker build \
+  --tag azure-platform-api:local \
+  .
+```
+
+### Run the container
+
+```bash
+docker run \
+  --rm \
+  --publish 8000:8000 \
+  azure-platform-api:local
+```
+
+### Validate Terraform formatting
+
+Run from the repository root:
+
+```bash
+terraform fmt \
+  -check \
+  -recursive
+```
+
+### Initialize the development environment
+
+```bash
+terraform \
+  -chdir=infrastructure/environments/dev \
+  init \
+  -backend-config=backend.hcl \
+  -input=false
+```
+
+The local `backend.hcl` file must not be committed if it contains environment-specific or sensitive backend configuration.
+
+### Validate the development environment
+
+```bash
+terraform \
+  -chdir=infrastructure/environments/dev \
+  validate
+```
+
+### Create a development plan
+
+```bash
+terraform \
+  -chdir=infrastructure/environments/dev \
+  plan \
+  -input=false \
+  -var-file=terraform.tfvars
+```
+
+The real `terraform.tfvars` file must remain local and must not be committed.
 
 ---
 
@@ -1100,46 +1624,72 @@ If a secret is committed, deleting it in a later commit is not sufficient. The s
 
 The project is complete only when:
 
-- every planned phase has a clear final status;
+- every roadmap phase has a clear final status;
 - the deployed architecture matches the documentation;
 - all core infrastructure is reproducible;
 - Terraform state is protected;
-- no secret is committed;
+- no secrets are committed;
 - application tests pass;
 - infrastructure validation passes;
 - security scans are reviewed;
 - CI/CD workflows operate successfully;
-- APIM policies are tested;
 - Container Apps deployment is verified;
+- APIM policies are tested;
 - the AKS advanced phase is demonstrated;
+- GitOps reconciliation is demonstrated;
 - monitoring receives expected telemetry;
 - alerts have documented owners and actions;
 - backup and restore procedures are tested;
 - troubleshooting scenarios are documented;
 - cost controls are verified;
 - temporary resources are destroyed;
-- architecture decisions are recorded;
-- evidence is sanitized;
+- Architecture Decision Records are complete;
+- deployment evidence is sanitized;
 - the complete platform can be explained and defended.
 
 ---
 
 ## Current work
 
-The repository, application baseline, container baseline, Terraform foundation, secure backend bootstrap, and development remote-state configuration are complete.
+The following foundations are complete:
 
-The current implementation target is the Development Network Foundation:
+- repository and Git workflow;
+- FastAPI application;
+- automated tests;
+- hardened Docker image;
+- GitHub Actions CI;
+- Terraform bootstrap;
+- secure Azure remote state;
+- state locking and recovery;
+- Development Network Foundation;
+- network architecture documentation;
+- sanitized network deployment evidence.
 
-- align development examples with the subscription's allowed region;
-- define the development IP address plan;
-- create a reusable Terraform network module;
-- create the development Resource Group;
-- create a Virtual Network;
-- create segmented application, API, data, management, and private-endpoint subnets where justified;
-- create and associate Network Security Groups;
-- expose sanitized module outputs;
-- extend Terraform validation and documentation;
-- review a saved Terraform plan before deployment;
-- verify Azure resources, state locking, tags, and cost state after deployment.
+The next implementation target is the **Azure Container Registry and Azure Container Apps baseline**.
 
-Azure API Management, Container Apps, private endpoints, managed databases, monitoring ingestion, and AKS remain controlled later phases because they require additional architectural and cost review.
+Planned work for the next phase:
+
+1. Review current ACR and Container Apps pricing.
+2. Confirm regional availability in Poland Central.
+3. Select cost-appropriate service configurations.
+4. Create a reusable Azure Container Registry Terraform module.
+5. Deploy a development registry.
+6. Keep ACR admin credentials disabled.
+7. Authenticate through Microsoft Entra ID.
+8. Build and tag the FastAPI image.
+9. Push the image to ACR.
+10. Create a reusable Azure Container Apps Terraform module.
+11. Create a Container Apps Managed Environment.
+12. Integrate the environment with `snet-container-apps-dev`.
+13. Configure registry authentication without stored passwords.
+14. Deploy the FastAPI container.
+15. Configure ingress.
+16. Configure liveness and readiness probes.
+17. Configure scale-to-zero where supported.
+18. Set bounded CPU, memory, and replica limits.
+19. Run application smoke tests.
+20. Capture sanitized deployment evidence.
+21. Review Azure Cost Management.
+22. Verify Terraform state and post-deployment drift.
+
+Azure API Management, private endpoints, managed databases, monitoring ingestion, and AKS remain later controlled phases because they require separate architecture, security, and cost reviews.
