@@ -24,8 +24,8 @@ output "container_app_name" {
 }
 
 output "container_app_fqdn" {
-  description = "Public fully qualified domain name of the latest Container App revision."
-  value       = azurerm_container_app.this.latest_revision_fqdn
+  description = "Stable public fully qualified domain name of the Azure Container App."
+  value       = azurerm_container_app.this.ingress[0].fqdn
 }
 
 output "latest_revision_name" {
