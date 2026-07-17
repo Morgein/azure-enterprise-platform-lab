@@ -31,3 +31,14 @@ output "network" {
     network_security_group_ids    = module.network.network_security_group_ids
   }
 }
+
+output "container_registry" {
+  description = "Non-sensitive configuration of the development Azure Container Registry."
+
+  value = {
+    id           = module.container_registry.id
+    name         = module.container_registry.name
+    login_server = module.container_registry.login_server
+    sku          = module.container_registry.sku
+  }
+}
