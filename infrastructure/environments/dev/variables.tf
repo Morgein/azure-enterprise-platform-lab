@@ -124,3 +124,32 @@ variable "additional_tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "container_registry_name" {
+  description = "Globally unique name of the development Azure Container Registry."
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-z0-9]{5,50}$", var.container_registry_name))
+    error_message = "The Container Registry name must contain only lowercase letters and numbers and must be between 5 and 50 characters long."
+  }
+}
+
+variable "container_registry_sku" {
+  description = "Service tier of the development Azure Container Registry."
+  type        = string
+  default     = "Basic"
+
+  validation {
+    condition = contains(
+      [
+        "Basic",
+        "Standard",
+        "Premium",
+      ],
+      var.container_registry_sku,
+    )
+
+    error_message = "The Container Registry SKU must be Basic, Standard, or Premium."
+  }
+}
