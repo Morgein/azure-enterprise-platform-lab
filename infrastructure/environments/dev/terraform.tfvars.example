@@ -5,6 +5,7 @@ location      = "polandcentral"
 workload_name = "platform"
 container_registry_name = "acraeplabexampledev"
 container_registry_sku  = "Basic"
+container_image = "acrexampledev.azurecr.io/azure-platform-api@sha256:0000000000000000000000000000000000000000000000000000000000000000"
 
 virtual_network_address_space = ["10.20.0.0/16"]
 

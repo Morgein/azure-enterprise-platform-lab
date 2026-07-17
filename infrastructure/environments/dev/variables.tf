@@ -153,3 +153,17 @@ variable "container_registry_sku" {
     error_message = "The Container Registry SKU must be Basic, Standard, or Premium."
   }
 }
+
+variable "container_image" {
+  description = "Immutable Azure Container Registry image deployed to the development Container App."
+  type        = string
+
+  validation {
+    condition = can(regex(
+      "^[a-z0-9]+\\.azurecr\\.io/[a-z0-9._/-]+@sha256:[a-f0-9]{64}$",
+      var.container_image,
+    ))
+
+    error_message = "The container image must be an immutable ACR reference ending with @sha256:<64 hexadecimal characters>."
+  }
+}
