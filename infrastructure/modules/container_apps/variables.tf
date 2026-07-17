@@ -209,3 +209,18 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "environment_variables" {
+  description = "Non-sensitive environment variables passed to the application container."
+  type        = map(string)
+  default     = {}
+
+  validation {
+    condition = alltrue([
+      for name in keys(var.environment_variables) :
+      can(regex("^[A-Z_][A-Z0-9_]*$", name))
+    ])
+
+    error_message = "Environment variable names must use uppercase letters, numbers, and underscores and must not start with a number."
+  }
+}

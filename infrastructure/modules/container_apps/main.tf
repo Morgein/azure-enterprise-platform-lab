@@ -27,6 +27,14 @@ resource "azurerm_container_app_environment" "this" {
   public_network_access          = "Enabled"
   zone_redundancy_enabled        = false
 
+  workload_profile {
+    name                  = "Consumption"
+    workload_profile_type = "Consumption"
+    minimum_count         = 0
+    maximum_count         = 0
+  }
+
+
   tags = var.tags
 }
 
@@ -69,7 +77,14 @@ resource "azurerm_container_app" "this" {
       image  = var.container_image
       cpu    = var.container_resources.cpu
       memory = var.container_resources.memory
+      dynamic "env" {
+        for_each = var.environment_variables
 
+        content {
+          name  = env.key
+          value = env.value
+        }
+      }
       liveness_probe {
         transport = "HTTP"
         port      = var.target_port
