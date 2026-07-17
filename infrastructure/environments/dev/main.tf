@@ -57,6 +57,10 @@ module "container_apps" {
     max_replicas = 1
   }
 
+  environment_variables = {
+    APP_ENV = var.environment
+  }
+
   external_ingress_enabled = true
 
   tags = local.common_tags
