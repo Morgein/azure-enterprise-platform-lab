@@ -42,3 +42,15 @@ output "container_registry" {
     sku          = module.container_registry.sku
   }
 }
+
+output "container_apps" {
+  description = "Non-sensitive configuration of the development Azure Container Apps deployment."
+
+  value = {
+    environment_name     = module.container_apps.environment_name
+    environment_domain   = module.container_apps.environment_default_domain
+    container_app_name   = module.container_apps.container_app_name
+    container_app_fqdn   = module.container_apps.container_app_fqdn
+    latest_revision_name = module.container_apps.latest_revision_name
+  }
+}

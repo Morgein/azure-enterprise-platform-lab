@@ -26,3 +26,38 @@ module "container_registry" {
 
   tags = local.common_tags
 }
+
+module "container_apps" {
+  source = "../../modules/container_apps"
+
+  environment_name   = "cae-${local.name_prefix}"
+  container_app_name = "ca-azure-platform-api-${var.environment}"
+  container_name     = "azure-platform-api"
+  identity_name      = "id-azure-platform-api-${var.environment}"
+
+  resource_group_name = azurerm_resource_group.platform.name
+  location            = azurerm_resource_group.platform.location
+
+  infrastructure_subnet_id = module.network.subnet_ids["container_apps"]
+
+  container_registry_id             = module.container_registry.id
+  container_registry_login_server   = module.container_registry.login_server
+  container_registry_pull_role_name = "AcrPull"
+
+  container_image = var.container_image
+  target_port     = 8000
+
+  container_resources = {
+    cpu    = 0.25
+    memory = "0.5Gi"
+  }
+
+  scale = {
+    min_replicas = 0
+    max_replicas = 1
+  }
+
+  external_ingress_enabled = true
+
+  tags = local.common_tags
+}
