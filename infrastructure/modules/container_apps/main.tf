@@ -49,17 +49,17 @@ resource "azurerm_container_app" "this" {
     identity = azurerm_user_assigned_identity.this.id
   }
 
-ingress {
-  external_enabled           = var.external_ingress_enabled
-  allow_insecure_connections = false
-  target_port                = var.target_port
-  transport                  = "http"
+  ingress {
+    external_enabled           = var.external_ingress_enabled
+    allow_insecure_connections = false
+    target_port                = var.target_port
+    transport                  = "http"
 
-  traffic_weight {
-    latest_revision = true
-    percentage      = 100
+    traffic_weight {
+      latest_revision = true
+      percentage      = 100
+    }
   }
-}
   template {
     min_replicas = var.scale.min_replicas
     max_replicas = var.scale.max_replicas
