@@ -115,4 +115,10 @@ resource "azurerm_container_app" "this" {
   depends_on = [
     azurerm_role_assignment.registry_pull,
   ]
+
+  lifecycle {
+    ignore_changes = [
+      template[0].container[0].image,
+    ]
+  }
 }
