@@ -20,9 +20,8 @@ resource "azurerm_user_assigned_identity" "this" {
 }
 
 resource "azurerm_federated_identity_credential" "github_environment" {
-  name      = var.federated_credential_name
-  parent_id = azurerm_user_assigned_identity.this.id
-
+  name                      = var.federated_credential_name
+  user_assigned_identity_id = azurerm_user_assigned_identity.this.id
   audience = [
     "api://AzureADTokenExchange",
   ]
