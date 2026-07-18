@@ -75,7 +75,7 @@ jobs:
             git diff-tree \
               --no-commit-id \
               --name-only \
-              --recursive \
+              -r \
               -m \
               "${DEPLOY_SHA}" \
               | sort --unique
