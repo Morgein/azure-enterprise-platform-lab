@@ -1,0 +1,134 @@
+name: Security Scanning
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "application/**"
+      - "infrastructure/**"
+      - ".github/workflows/**"
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "application/**"
+      - "infrastructure/**"
+      - ".github/workflows/**"
+
+  schedule:
+    - cron: "23 3 * * 1"
+
+  workflow_dispatch:
+
+concurrency:
+  group: security-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  container-image-scan:
+    name: Trivy Container Image Scan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Build container image for security scanning
+        run: |
+          docker build \
+            --pull \
+            --tag azure-platform-api:security-scan \
+            application
+
+      - name: Scan container image with Trivy
+        uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
+        with:
+          scan-type: image
+          image-ref: azure-platform-api:security-scan
+          scanners: vuln,secret
+          vuln-type: os,library
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+          limit-severities-for-sarif: true
+          format: sarif
+          output: trivy-results.sarif
+          exit-code: "1"
+
+      - name: Upload Trivy results to GitHub Code Scanning
+        if: >-
+          always() &&
+          hashFiles('trivy-results.sarif') != '' &&
+          (
+            github.event_name != 'pull_request' ||
+            github.event.pull_request.head.repo.full_name == github.repository
+          )
+        uses: github/codeql-action/upload-sarif@d03f4cc0498d5a63039d157eb274d9c2fc50f17a # v3.37.1
+        with:
+          sarif_file: trivy-results.sarif
+          category: trivy-container-image
+
+  terraform-security-scan:
+    name: Checkov Terraform Security Scan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Scan Terraform configuration with Checkov
+        uses: bridgecrewio/checkov-action@99bb2caf247dfd9f03cf984373bc6043d4e32ebf # v12.1347.0
+        with:
+          directory: infrastructure
+          framework: terraform
+          download_external_modules: false
+          quiet: false
+          soft_fail: false
+          output_format: cli,sarif
+          output_file_path: console,checkov-results.sarif
+
+      - name: Upload Checkov results to GitHub Code Scanning
+        if: >-
+          always() &&
+          hashFiles('checkov-results.sarif') != '' &&
+          (
+            github.event_name != 'pull_request' ||
+            github.event.pull_request.head.repo.full_name == github.repository
+          )
+        uses: github/codeql-action/upload-sarif@d03f4cc0498d5a63039d157eb274d9c2fc50f17a # v3.37.1
+        with:
+          sarif_file: checkov-results.sarif
+          category: checkov-terraform
+
+  dependency-review:
+    name: Dependency Review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          fail-on-severity: high
