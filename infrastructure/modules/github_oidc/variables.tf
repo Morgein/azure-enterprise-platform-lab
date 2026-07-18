@@ -29,12 +29,16 @@ variable "location" {
 }
 
 variable "github_repository" {
-  description = "GitHub repository in owner/repository format."
+  description = "Immutable GitHub repository identity in owner@owner_id/repository@repository_id format."
   type        = string
 
   validation {
-    condition     = can(regex("^[^/]+/[^/]+$", var.github_repository))
-    error_message = "The GitHub repository must use the owner/repository format."
+    condition = can(regex(
+      "^[^/@]+@[0-9]+/[^/@]+@[0-9]+$",
+      var.github_repository,
+    ))
+
+    error_message = "The GitHub repository identity must use the owner@owner_id/repository@repository_id format."
   }
 }
 
