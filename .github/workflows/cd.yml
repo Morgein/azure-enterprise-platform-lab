@@ -2,6 +2,13 @@ name: Continuous Deployment
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows:
+      - Continuous Integration
+    branches:
+      - main
+    types:
+      - completed
 
 permissions:
   contents: read
@@ -11,8 +18,89 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  detect-changes:
+    name: Detect deployable changes
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.event == 'push'
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    outputs:
+      deploy: ${{ steps.changes.outputs.deploy }}
+      deploy_sha: ${{ steps.target.outputs.sha }}
+
+    steps:
+      - name: Determine deployment commit
+        id: target
+        shell: bash
+        env:
+          WORKFLOW_RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+
+          if [[ -n "${WORKFLOW_RUN_SHA}" ]]; then
+            deploy_sha="${WORKFLOW_RUN_SHA}"
+          else
+            deploy_sha="${GITHUB_SHA}"
+          fi
+
+          echo "Deployment commit: ${deploy_sha}"
+          echo "sha=${deploy_sha}" >> "${GITHUB_OUTPUT}"
+
+      - name: Checkout deployment commit
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ steps.target.outputs.sha }}
+          fetch-depth: 2
+
+      - name: Detect application changes
+        id: changes
+        shell: bash
+        env:
+          DEPLOY_SHA: ${{ steps.target.outputs.sha }}
+        run: |
+          set -euo pipefail
+
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            echo "Manual deployment requested."
+            echo "deploy=true" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          changed_files="$(
+            git diff-tree \
+              --no-commit-id \
+              --name-only \
+              --recursive \
+              -m \
+              "${DEPLOY_SHA}" \
+              | sort --unique
+          )"
+
+          echo "Changed files:"
+          printf '%s\n' "${changed_files}"
+
+          if grep \
+            --extended-regexp \
+            --quiet \
+            '^(application/|\.github/workflows/cd\.yml$)' \
+            <<< "${changed_files}"; then
+            echo "Deployable changes detected."
+            echo "deploy=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "No deployable changes detected."
+            echo "deploy=false" >> "${GITHUB_OUTPUT}"
+          fi
+
   build-and-deploy:
     name: Build and deploy to Development
+    needs:
+      - detect-changes
+    if: needs.detect-changes.outputs.deploy == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -24,6 +112,7 @@ jobs:
       id-token: write
 
     env:
+      DEPLOY_SHA: ${{ needs.detect-changes.outputs.deploy_sha }}
       AZURE_CONTAINER_APP: ${{ vars.AZURE_CONTAINER_APP }}
       AZURE_CONTAINER_REGISTRY: ${{ vars.AZURE_CONTAINER_REGISTRY }}
       AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
@@ -31,8 +120,10 @@ jobs:
       REGISTRY_LOGIN_SERVER: ${{ vars.AZURE_CONTAINER_REGISTRY }}.azurecr.io
 
     steps:
-      - name: Checkout repository
+      - name: Checkout verified deployment commit
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ needs.detect-changes.outputs.deploy_sha }}
 
       - name: Authenticate to Azure with OIDC
         uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
@@ -78,7 +169,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          short_sha="${GITHUB_SHA::12}"
+          short_sha="$(printf '%s' "${DEPLOY_SHA}" | cut -c1-12)"
           image_tag="sha-${short_sha}"
           image_reference="${REGISTRY_LOGIN_SERVER}/${CONTAINER_REPOSITORY}:${image_tag}"
 
@@ -196,6 +287,7 @@ jobs:
             echo "### Development deployment"
             echo ""
             echo "- Environment: development"
+            echo "- Commit: ${DEPLOY_SHA}"
             echo "- Container App: ${AZURE_CONTAINER_APP}"
             echo "- Image tag: ${{ steps.image.outputs.tag }}"
             echo "- Image digest: ${{ steps.build.outputs.digest }}"
