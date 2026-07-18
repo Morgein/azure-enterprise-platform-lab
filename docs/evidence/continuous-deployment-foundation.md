@@ -540,6 +540,12 @@ The successful automatic run demonstrated:
 
 ![Successful automatic Continuous Deployment](screenshots/continuous-deployment/02-github-actions-automatic-cd-success.png)
 
+### Documentation-only deployment skip
+
+![Documentation-only deployment skip](screenshots/continuous-deployment/03-documentation-change-deployment-skipped.png)
+
+The documentation-only merge triggered the Continuous Deployment workflow after successful CI. The change-detection job completed successfully, while the deployment job was skipped because no deployable application files had changed.
+
 ---
 
 ## Validation summary
@@ -559,7 +565,7 @@ The successful automatic run demonstrated:
 | Service information smoke test | Passed |
 | Deployment summary | Passed |
 | Application change detection | Passed |
-| Documentation-only deployment skip | Pending final evidence PR |
+| Documentation-only deployment skip | Passed | Change detection completed and the Azure deployment job was skipped |
 | Terraform ownership separation | Passed |
 | Scale-to-zero compatibility | Passed |
 
