@@ -32,6 +32,8 @@ resource "azurerm_virtual_network" "this" {
 }
 
 resource "azurerm_subnet" "this" {
+  #checkov:skip=CKV2_AZURE_31:NSGs are attached through azurerm_subnet_network_security_group_association below.
+
   for_each = var.subnets
 
   name                              = each.value.name

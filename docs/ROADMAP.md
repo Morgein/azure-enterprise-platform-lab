@@ -11,14 +11,15 @@ The roadmap moves from local development fundamentals to a production-oriented A
 | Field | Value |
 |---|---|
 | Overall completion | Approximately 45% |
-| Platform Foundation completion | Approximately 75% |
+| Deployable Azure Platform Foundation | Approximately 80% |
 | Primary environment | Development |
 | Primary region | Poland Central |
 | Current runtime | Azure Container Apps |
 | Infrastructure management | Terraform |
 | Delivery platform | GitHub Actions |
 | Authentication | GitHub OIDC and Managed Identity |
-| Current focus | Evidence, governance, and security scanning |
+| Security validation | Trivy, Checkov, and Dependency Review |
+| Current focus | Security evidence, governance, and workload identity |
 
 ### Progress calculation
 
@@ -32,7 +33,7 @@ The roadmap moves from local development fundamentals to a production-oriented A
 | Phase 5 | 90% |
 | Phase 6 | 0% |
 | Phase 7 | 0% |
-| Phase 8 | 85% |
+| Phase 8 | 90% |
 | Phase 9 | 0% |
 | Phase 10 | 0% |
 | Phase 11 | 0% |
@@ -40,10 +41,12 @@ The roadmap moves from local development fundamentals to a production-oriented A
 | Phase 13 | 0% |
 
 ```text
-(100 + 100 + 100 + 50 + 100 + 90 + 85) / 14 = 44.6%
+(100 + 100 + 100 + 50 + 100 + 90 + 90) / 14 = 45.0%
 ```
 
-The complete advanced roadmap is therefore considered approximately **45% complete**.
+The complete advanced roadmap is therefore considered **45% complete**.
+
+The currently deployable Azure Platform Foundation is considered approximately **80% complete** because the application, container, networking, remote state, identity, delivery, and security-scanning foundations are operational.
 
 ---
 
@@ -52,6 +55,7 @@ The complete advanced roadmap is therefore considered approximately **45% comple
 - `Planned` — implementation has not started.
 - `In progress` — implementation, testing, evidence, or documentation is active.
 - `Completed` — implementation, validation, documentation, and evidence satisfy the defined exit criteria.
+- `Evidence finalization` — the implementation is operational, but final screenshots, documentation, or advanced validation remain.
 - `Reference design` — architecture is validated through Terraform configuration, plans, diagrams, ADRs, and runbooks without permanent deployment.
 - `Controlled laboratory` — infrastructure is deployed only during a limited testing window because of cost.
 - `Blocked` — implementation cannot continue until a documented dependency is resolved.
@@ -70,7 +74,7 @@ The complete advanced roadmap is therefore considered approximately **45% comple
 | 5 | Azure Container Registry and Container Apps | Evidence finalization | 90% |
 | 6 | Identity, Key Vault, Storage, and PostgreSQL | Planned | 0% |
 | 7 | Azure API Management | Planned | 0% |
-| 8 | GitHub Actions, OIDC, and application delivery | In progress | 85% |
+| 8 | GitHub Actions, OIDC, delivery, and security scanning | In progress | 90% |
 | 9 | Observability and SRE | Planned | 0% |
 | 10 | Azure Kubernetes Service and Helm | Planned | 0% |
 | 11 | GitOps and progressive delivery | Planned | 0% |
@@ -89,7 +93,7 @@ Progress: **100%**
 
 - Prepare the local engineering environment.
 - Create a secure Git repository.
-- protect personal information and credentials.
+- Protect personal information and credentials.
 - Establish project structure and working rules.
 - Define initial cost-control requirements.
 
@@ -286,14 +290,16 @@ Progress: **50%**
 - [x] Documented cost-control requirements.
 - [x] Selected low-cost ACR configuration.
 - [x] Selected scale-to-zero Container Apps configuration.
+- [x] Bounded Container Apps maximum replicas.
 - [x] Deferred expensive services to controlled windows.
+- [x] Documented cost-based Checkov exceptions.
 
 ## Remaining implementation
 
 - [ ] Configure Azure budget alerts.
 - [ ] Capture sanitized budget evidence.
 - [ ] Add selected Azure Policy definitions.
-- [ ] Document policy exemptions.
+- [ ] Document Azure Policy exemptions.
 - [ ] Create resource expiration rules.
 - [ ] Create orphan-resource checks.
 - [ ] Create a formal resource ownership matrix.
@@ -426,6 +432,8 @@ Progress: **90%**
 - [x] Verified runtime endpoints.
 - [x] Verified Terraform no-drift.
 - [x] Created deployment evidence.
+- [x] Added container vulnerability scanning.
+- [x] Added container secret scanning.
 
 ## Remaining implementation
 
@@ -433,6 +441,7 @@ Progress: **90%**
 - [ ] Demonstrate controlled rollback.
 - [ ] Record rollback evidence.
 - [ ] Review revision retention behavior.
+- [ ] Add signed container images.
 - [ ] Finalize cost evidence.
 
 ## Evidence
@@ -447,8 +456,10 @@ Progress: **90%**
 - [x] Application can scale to zero.
 - [x] Maximum replicas are bounded.
 - [x] Image digest is recorded.
+- [x] Image vulnerability scanning is enforced.
 - [ ] Revision rollback is demonstrated.
 - [ ] Traffic splitting is demonstrated.
+- [ ] Image signing is demonstrated.
 
 ---
 
@@ -495,7 +506,7 @@ Deployment model: **Mixed permanent and controlled laboratory**
 
 ## Evidence requirements
 
-- managed identity configuration;
+- Managed Identity configuration;
 - Key Vault RBAC;
 - successful secret retrieval;
 - denied secret access;
@@ -529,14 +540,14 @@ Deployment model: **Cost-reviewed controlled deployment**
 
 ## Objectives
 
-- Place a governed API gateway in front of the application.
-- Introduce authentication, throttling, transformation, versioning, and policy-as-code.
-- Demonstrate the role of an enterprise API gateway.
+- Place a governed API Gateway in front of the application.
+- Introduce authentication, throttling, transformation, versioning, and Policy as Code.
+- Demonstrate the role of an enterprise API Gateway.
 
 ## Planned implementation
 
 - [ ] Review available APIM SKUs.
-- [ ] Review student subscription restrictions.
+- [ ] Review Azure for Students restrictions.
 - [ ] Review Poland Central availability.
 - [ ] Create an APIM Terraform module.
 - [ ] Deploy a cost-appropriate APIM instance.
@@ -589,11 +600,11 @@ Deployment model: **Cost-reviewed controlled deployment**
 
 ---
 
-# Phase 8 — GitHub Actions, OIDC, and application delivery
+# Phase 8 — GitHub Actions, OIDC, application delivery, and security scanning
 
 Status: **In progress**
 
-Progress: **85%**
+Progress: **90%**
 
 ## Objectives
 
@@ -601,8 +612,11 @@ Progress: **85%**
 - Remove long-lived Azure credentials.
 - Deploy only verified application commits.
 - Establish an auditable CI/CD process.
+- Enforce container, dependency, secret, and Infrastructure as Code security validation.
 
 ## Completed implementation
+
+### Continuous Integration
 
 - [x] Created Pull Request CI.
 - [x] Created main-branch CI.
@@ -614,6 +628,9 @@ Progress: **85%**
 - [x] Added Terraform formatting validation.
 - [x] Added Terraform root-module validation.
 - [x] Added provider lock-file enforcement.
+
+### Identity and Continuous Deployment
+
 - [x] Created a protected GitHub Environment.
 - [x] Created a separate deployment identity.
 - [x] Configured GitHub OIDC.
@@ -623,6 +640,7 @@ Progress: **85%**
 - [x] Added manual Continuous Deployment.
 - [x] Added automatic CI-gated deployment.
 - [x] Added deployable change detection.
+- [x] Validated documentation-only deployment skipping.
 - [x] Added exact verified commit checkout.
 - [x] Added Docker Buildx.
 - [x] Added GitHub Actions build cache.
@@ -636,12 +654,43 @@ Progress: **85%**
 - [x] Documented change-detection troubleshooting.
 - [x] Created Continuous Deployment evidence.
 
+### Security Scanning Foundation
+
+- [x] Created a dedicated Security Scanning workflow.
+- [x] Added Trivy container vulnerability scanning.
+- [x] Added Trivy secret scanning.
+- [x] Added Checkov Terraform scanning.
+- [x] Added a blocking Checkov policy gate.
+- [x] Added GitHub Dependency Review.
+- [x] Enabled GitHub Dependency Graph.
+- [x] Added SARIF report generation.
+- [x] Added SARIF upload to GitHub Code Scanning.
+- [x] Added weekly scheduled security scans.
+- [x] Added manual security workflow execution.
+- [x] Added path-aware Pull Request scanning.
+- [x] Added least-privilege workflow permissions.
+- [x] Pinned third-party GitHub Actions to immutable commit SHAs.
+- [x] Pinned the Checkov CLI version.
+- [x] Reviewed all reported Terraform findings.
+- [x] Documented narrowly scoped Checkov Policy Exceptions.
+- [x] Documented compensating security controls.
+- [x] Preserved blocking behavior for unapproved findings.
+- [x] Created Security Scanning evidence.
+
+## Checkov validation summary
+
+| Result | Count |
+|---|---:|
+| Passed checks | 23 |
+| Failed checks | 0 |
+| Documented skipped checks | 20 |
+
+The skipped checks are explicit, narrowly scoped Policy Exceptions. They represent cost limitations, platform constraints, unsupported enterprise features, or false positives caused by separate Terraform association resources.
+
+New or undocumented findings continue to fail the Pull Request security gate.
+
 ## Remaining implementation
 
-- [ ] Validate documentation-only deployment skipping.
-- [ ] Add Trivy image scanning.
-- [ ] Add Checkov Terraform scanning.
-- [ ] Add secret scanning review.
 - [ ] Publish Terraform plan artifacts.
 - [ ] Add protected Terraform apply.
 - [ ] Add scheduled Terraform drift detection.
@@ -650,10 +699,14 @@ Progress: **85%**
 - [ ] Add required production reviewers.
 - [ ] Add deployment rollback automation.
 - [ ] Add unauthorized deployment test evidence.
+- [ ] Add container image signing and verification.
+- [ ] Add application-focused SAST.
+- [ ] Review GitHub branch protection requirements.
 
 ## Evidence
 
 - [Continuous Deployment Foundation](evidence/continuous-deployment-foundation.md)
+- [Security Scanning Foundation](evidence/security-scanning-foundation.md)
 
 ## Exit criteria
 
@@ -664,9 +717,16 @@ Progress: **85%**
 - [x] Digest-based deployment is operational.
 - [x] Failed CI prevents deployment.
 - [x] Failed smoke tests fail the workflow.
-- [ ] Security scanning is enforced.
+- [x] Documentation-only changes do not trigger unnecessary deployment.
+- [x] Container vulnerability scanning is enforced.
+- [x] Container secret scanning is enforced.
+- [x] Terraform security scanning is enforced.
+- [x] Dependency Review is enforced.
+- [x] Security findings are visible through SARIF.
+- [x] Security scanning is enforced.
 - [ ] Protected Terraform apply is implemented.
 - [ ] Production approval is implemented.
+- [ ] Container image signing is implemented.
 
 ---
 
@@ -927,7 +987,7 @@ Progress: **0%**
 
 - Validate the complete repository.
 - Prepare a reproducible technical demonstration.
-- Prepare the project for Cloud, DevOps, Platform, and SRE interviews.
+- Prepare the project for Cloud, DevOps, Platform, DevSecOps, and SRE interviews.
 
 ## Planned implementation
 
@@ -1006,7 +1066,8 @@ Progress: **0%**
 | Scale-to-zero | Remains deployed but compute can stop | Azure Container Apps |
 | Controlled laboratory | Deploy, test, document, destroy | PostgreSQL, APIM, AKS |
 | Reference design | Validate without permanent deployment | Expensive production topology |
-| Free control plane | No separate service charge expected | GitHub OIDC, Federated Identity Credential |
+| Free control plane | No separate Azure service charge expected | GitHub OIDC, Federated Identity Credential |
+| CI security control | Executes on GitHub-hosted runners | Trivy, Checkov, Dependency Review |
 
 ---
 
@@ -1014,16 +1075,44 @@ Progress: **0%**
 
 The next tasks are:
 
-1. complete the Continuous Deployment evidence PR;
-2. validate documentation-only deployment skipping;
-3. capture the skipped deployment result;
-4. finish governance and budget evidence;
-5. add Trivy container scanning;
-6. add Checkov Terraform scanning;
-7. add dependency and secret scanning;
-8. complete Container Apps revision rollback;
-9. complete Container Apps traffic splitting;
-10. begin the Identity and Key Vault phase.
+1. finalize the Security Scanning Foundation evidence Pull Request;
+2. merge the blocking security scanning workflow into `main`;
+3. configure and document Azure budget alerts;
+4. complete governance and cost-control evidence;
+5. create the Azure Key Vault Terraform module;
+6. configure Managed Identity access to Key Vault;
+7. create identity-based application Blob Storage;
+8. add container image signing and application SAST;
+9. add protected Terraform plan and apply workflows;
+10. add scheduled Terraform drift detection;
+11. demonstrate Container Apps rollback and traffic splitting;
+12. prepare the Azure API Management controlled deployment.
+
+---
+
+## Near-term milestone
+
+The next major milestone is the **Secure Application Platform Foundation**.
+
+It will be achieved when:
+
+- [x] the application is tested and containerized;
+- [x] the container runs as a non-root user;
+- [x] infrastructure is managed by Terraform;
+- [x] Terraform state is stored remotely;
+- [x] the development network is deployed;
+- [x] ACR stores the application image;
+- [x] Container Apps runs the application;
+- [x] ACR authentication uses Managed Identity;
+- [x] GitHub authenticates to Azure using OIDC;
+- [x] CI validates application and Terraform changes;
+- [x] CD deploys verified immutable artifacts;
+- [x] container security scanning is enforced;
+- [x] Terraform security scanning is enforced;
+- [x] dependency changes are reviewed;
+- [ ] Key Vault provides application secrets;
+- [ ] Blob Storage access uses Managed Identity;
+- [ ] budget alerts and governance evidence are complete.
 
 ---
 
@@ -1039,6 +1128,9 @@ Azure Enterprise Platform Lab is complete only when:
 - no secrets are committed;
 - CI/CD operates without Azure client secrets;
 - image and infrastructure security scans are reviewed;
+- unapproved security findings block Pull Requests;
+- container images are signed and verified;
+- Key Vault and data access use Managed Identity;
 - APIM policies are tested;
 - telemetry is observable;
 - alerts have runbooks;

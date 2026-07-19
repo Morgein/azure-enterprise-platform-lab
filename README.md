@@ -3,6 +3,7 @@
 [![Continuous Integration](https://github.com/Morgein/azure-enterprise-platform-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/Morgein/azure-enterprise-platform-lab/actions/workflows/ci.yml)
 [![Continuous Deployment](https://github.com/Morgein/azure-enterprise-platform-lab/actions/workflows/cd.yml/badge.svg)](https://github.com/Morgein/azure-enterprise-platform-lab/actions/workflows/cd.yml)
 [![Terraform Validation](https://github.com/Morgein/azure-enterprise-platform-lab/actions/workflows/terraform-ci.yml/badge.svg)](https://github.com/Morgein/azure-enterprise-platform-lab/actions/workflows/terraform-ci.yml)
+[![Security Scanning](https://github.com/Morgein/azure-enterprise-platform-lab/actions/workflows/security.yml/badge.svg)](https://github.com/Morgein/azure-enterprise-platform-lab/actions/workflows/security.yml)
 
 A production-oriented Azure Platform Engineering project built incrementally from cloud and DevOps fundamentals to advanced identity, API management, observability, Kubernetes, GitOps, reliability, disaster recovery, and FinOps practices.
 
@@ -13,7 +14,7 @@ The project deploys a tested FastAPI service to Azure Container Apps through Ter
 > **Primary environment:** Development  
 > **Primary region:** Poland Central  
 > **Cloud subscription:** Azure for Students  
-> **Current focus:** Continuous Deployment evidence, governance, and security scanning
+> **Current focus:** Security evidence, governance, and workload identity
 
 ---
 
@@ -80,6 +81,11 @@ The current implementation includes:
 - automatic deployment after successful CI;
 - immutable image tags and digest-based deployment;
 - post-deployment smoke tests;
+- Trivy container vulnerability and secret scanning;
+- Checkov Terraform security scanning;
+- GitHub Dependency Review;
+- SARIF integration with GitHub Code Scanning;
+- scheduled security re-evaluation;
 - sanitized deployment evidence.
 
 Later phases extend the platform with:
@@ -114,7 +120,7 @@ The official roadmap contains fourteen phases numbered from `0` to `13`.
 | 5 | Azure Container Registry and Container Apps | 90% |
 | 6 | Identity, Key Vault, Storage, and PostgreSQL | 0% |
 | 7 | Azure API Management | 0% |
-| 8 | GitHub Actions, OIDC, and application delivery | 85% |
+| 8 | GitHub Actions, OIDC, application delivery, and security scanning | 90% |
 | 9 | Observability and SRE | 0% |
 | 10 | Azure Kubernetes Service and Helm | 0% |
 | 11 | GitOps and progressive delivery | 0% |
@@ -124,12 +130,12 @@ The official roadmap contains fourteen phases numbered from `0` to `13`.
 Approximate completion:
 
 ```text
-(100 + 100 + 100 + 50 + 100 + 90 + 85) / 14 = 44.6%
+(100 + 100 + 100 + 50 + 100 + 90 + 90) / 14 = 45.0%
 ```
 
 The project is therefore considered approximately **45% complete**.
 
-This percentage measures the complete advanced roadmap. The deployable Azure Platform Foundation itself is approximately **75% complete**.
+This percentage measures the complete advanced roadmap. The deployable Azure Platform Foundation itself is approximately **80% complete**.
 
 ---
 
@@ -217,6 +223,25 @@ This percentage measures the complete advanced roadmap. The deployable Azure Pla
 - public HTTPS ingress;
 - deployment smoke testing.
 
+### Security scanning foundation
+
+- dedicated GitHub Actions security workflow;
+- Trivy container vulnerability scanning;
+- Trivy container secret scanning;
+- operating-system and application dependency scanning;
+- blocking HIGH and CRITICAL vulnerability policy;
+- Checkov Terraform security scanning;
+- blocking Terraform policy gate;
+- GitHub Dependency Review;
+- HIGH severity dependency-change policy;
+- SARIF integration with GitHub Code Scanning;
+- scheduled weekly security scanning;
+- path-aware workflow execution;
+- immutable third-party action references;
+- least-privilege workflow permissions;
+- reviewed resource-level Checkov Policy Exceptions;
+- documented compensating security controls.
+
 ---
 
 ## Architecture
@@ -239,6 +264,8 @@ flowchart TD
     Terraform --> State["Azure Blob Remote State"]
 
     GitHub["GitHub Repository"] --> CI["Continuous Integration"]
+    GitHub --> Security["Security Scanning"]
+    Security --> Gate["Pull Request Security Gate"]
     CI --> CD["Continuous Deployment"]
     CD --> DeployIdentity["GitHub Deployment Identity"]
     DeployIdentity -->|AcrPush| ACR
@@ -308,10 +335,19 @@ The future request flow places Azure API Management in front of the application.
 flowchart TD
     Commit["Commit"] --> PR["Pull Request"]
     PR --> CI["Continuous Integration"]
+    PR --> Security["Security Scanning"]
 
     CI --> Python["Python quality and tests"]
     Python --> Container["Container build and smoke test"]
+
+    Security --> Trivy["Trivy image scan"]
+    Security --> Checkov["Checkov Terraform scan"]
+    Security --> Dependencies["Dependency Review"]
+
     Container --> Merge["Merge to main"]
+    Trivy --> Merge
+    Checkov --> Merge
+    Dependencies --> Merge
 
     Merge --> MainCI["Main branch CI"]
     MainCI --> Gate{"CI successful?"}
@@ -334,6 +370,7 @@ flowchart TD
 A deployment is successful only when:
 
 - Continuous Integration passes;
+- Security Scanning passes;
 - the verified commit is checked out;
 - OIDC authentication succeeds;
 - the image is pushed successfully;
@@ -426,7 +463,8 @@ Security controls:
 - runtime identity uses `AcrPull`;
 - GitHub stores no registry password;
 - images use commit-based tags;
-- deployments use image digests.
+- deployments use image digests;
+- container images are scanned by Trivy.
 
 ### Azure Container Apps
 
@@ -594,6 +632,42 @@ Deployment behavior:
 - Container Apps receives an immutable digest;
 - smoke tests validate the result.
 
+### Security Scanning
+
+File:
+
+```text
+.github/workflows/security.yml
+```
+
+Triggers:
+
+- relevant Pull Requests targeting `main`;
+- relevant pushes to `main`;
+- weekly scheduled execution;
+- manual `workflow_dispatch`.
+
+Jobs:
+
+1. `Trivy Container Image Scan`
+2. `Checkov Terraform Security Scan`
+3. `Dependency Review`
+
+Security behavior:
+
+- the real application container image is built before scanning;
+- Trivy scans operating-system and application dependencies;
+- Trivy scans the image for embedded secrets;
+- fixable HIGH and CRITICAL vulnerabilities fail the workflow;
+- Checkov scans all Terraform configuration under `infrastructure/`;
+- unresolved Terraform policy violations fail the workflow;
+- reviewed exceptions are scoped to exact Terraform resources;
+- Pull Request dependency changes are reviewed;
+- HIGH severity dependency findings fail the workflow;
+- Trivy and Checkov results are uploaded using SARIF;
+- all third-party actions are pinned to immutable commit SHAs;
+- the workflow cannot deploy or modify Azure resources.
+
 ---
 
 ## Terraform strategy
@@ -682,6 +756,7 @@ Implemented controls:
 - no permanent PostgreSQL instance yet;
 - no APIM deployment before cost review;
 - path-aware Continuous Deployment;
+- path-aware Security Scanning;
 - no deployment after failed CI;
 - remote-state recovery instead of duplicate infrastructure;
 - common `CostProfile=StudentLab` tags;
@@ -749,6 +824,17 @@ terraform plan
 - information endpoint test;
 - GitHub Actions Deployment Summary.
 
+### Security validation
+
+- Trivy container vulnerability scanning;
+- Trivy container secret scanning;
+- Checkov Terraform policy scanning;
+- GitHub Dependency Review;
+- SARIF validation and upload;
+- explicit Checkov policy-gate enforcement;
+- resource-level Policy Exception review;
+- scheduled vulnerability re-evaluation.
+
 ---
 
 ## Evidence
@@ -758,6 +844,7 @@ terraform plan
 - [Development Network Foundation](docs/evidence/development-network-foundation.md)
 - [Container Platform Foundation](docs/evidence/container-platform-foundation.md)
 - [Continuous Deployment Foundation](docs/evidence/continuous-deployment-foundation.md)
+- [Security Scanning Foundation](docs/evidence/security-scanning-foundation.md)
 
 ### Evidence principles
 
@@ -781,6 +868,7 @@ Evidence must:
 │   └── workflows/
 │       ├── ci.yml
 │       ├── cd.yml
+│       ├── security.yml
 │       └── terraform-ci.yml
 ├── application/
 │   ├── src/
@@ -834,7 +922,7 @@ Evidence must:
 | 5 | Azure Container Registry and Container Apps | Evidence finalization |
 | 6 | Identity, Key Vault, Storage, and PostgreSQL | Planned |
 | 7 | Azure API Management | Planned |
-| 8 | GitHub Actions, OIDC, and application delivery | In progress |
+| 8 | GitHub Actions, OIDC, delivery, and security scanning | In progress |
 | 9 | Observability and SRE | Planned |
 | 10 | Azure Kubernetes Service and Helm | Planned |
 | 11 | GitOps and progressive delivery | Planned |
@@ -1019,6 +1107,14 @@ The project follows these rules:
 - pin third-party GitHub Actions to immutable commit SHAs;
 - run applications as non-root;
 - validate all Pull Requests;
+- scan container images for vulnerabilities and secrets;
+- scan Terraform configuration with Checkov;
+- review dependency changes before merge;
+- keep security policy gates blocking;
+- document every accepted security exception;
+- scope Checkov exceptions to exact resources;
+- upload supported findings through SARIF;
+- run scheduled security re-evaluation;
 - sanitize screenshots and documentation;
 - review Terraform plans before apply;
 - use feature branches and Pull Requests;
@@ -1034,17 +1130,21 @@ Not yet implemented:
 
 - production GitHub Environment;
 - required production reviewers;
-- signed container images;
-- Trivy image scanning;
-- Checkov Terraform scanning;
+- Notation-based signed container images;
+- signature verification before deployment;
+- Python Static Application Security Testing;
+- formal Policy Exception expiration dates;
 - Azure Key Vault;
+- workload identity-based Blob Storage access;
 - private endpoints;
 - PostgreSQL application integration;
 - Azure API Management;
 - Application Insights;
 - OpenTelemetry;
-- alerting;
+- centralized alerting;
 - formal SLOs;
+- protected Terraform apply;
+- scheduled Terraform drift detection;
 - automated rollback;
 - Container Apps traffic splitting evidence;
 - staging deployment;
@@ -1060,24 +1160,27 @@ Not yet implemented:
 
 Immediate targets:
 
-1. finalize Continuous Deployment evidence;
-2. validate documentation-only deployment skipping;
-3. update the project roadmap;
-4. add Trivy container scanning;
-5. add Checkov Terraform security scanning;
-6. complete governance and budget evidence.
+1. finalize the Security Scanning evidence Pull Request;
+2. merge the validated security workflow into `main`;
+3. complete governance and Azure budget evidence;
+4. add Key Vault and workload secret access;
+5. add identity-based Azure Blob Storage access;
+6. evaluate Notation-based container image signing;
+7. add Python Static Application Security Testing;
+8. add scheduled Terraform drift detection.
 
 Next Azure platform phase:
 
-1. create a Key Vault module;
-2. create an application managed-identity access model;
-3. add Azure Blob Storage;
-4. test identity-based Blob operations;
-5. evaluate PostgreSQL cost and regional availability;
-6. deploy PostgreSQL only during a controlled laboratory window;
-7. place Azure API Management in front of the application;
-8. import the FastAPI OpenAPI specification;
-9. implement authentication, throttling, quotas, and policy-as-code.
+1. create a reusable Key Vault module;
+2. create an application Managed Identity access model;
+3. store application configuration without static credentials;
+4. create Azure Blob Storage;
+5. test identity-based Blob operations;
+6. evaluate PostgreSQL cost and regional availability;
+7. deploy PostgreSQL only during a controlled laboratory window;
+8. place Azure API Management in front of the application;
+9. import the FastAPI OpenAPI specification;
+10. implement authentication, throttling, quotas, and policy-as-code.
 
 ---
 

@@ -9,6 +9,12 @@ resource "azurerm_resource_group" "state" {
 }
 
 resource "azurerm_storage_account" "state" {
+  #checkov:skip=CKV_AZURE_206:Non-production student lab uses cost-optimized LRS for Terraform state.
+  #checkov:skip=CKV_AZURE_33:Queue service is not used by the Terraform state backend.
+  #checkov:skip=CKV_AZURE_59:Public endpoint is required by the student workstation; access is protected by Microsoft Entra ID RBAC.
+  #checkov:skip=CKV2_AZURE_33:Private Endpoint requires private runner connectivity that is outside the student-lab scope.
+  #checkov:skip=CKV2_AZURE_1:Microsoft-managed encryption and infrastructure encryption are sufficient for non-production state.
+
   name                = local.storage_account_name
   resource_group_name = azurerm_resource_group.state.name
   location            = var.storage_account_location
@@ -53,6 +59,8 @@ resource "azurerm_role_assignment" "state_admin" {
 }
 
 resource "azurerm_storage_container" "state" {
+  #checkov:skip=CKV2_AZURE_21:Additional Blob read logging is outside the cost-controlled student-lab scope.
+
   name                  = var.container_name
   storage_account_id    = azurerm_storage_account.state.id
   container_access_type = "private"
