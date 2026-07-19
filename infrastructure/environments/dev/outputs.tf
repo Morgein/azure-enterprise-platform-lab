@@ -68,3 +68,8 @@ output "container_apps" {
     latest_revision_name = module.container_apps.latest_revision_name
   }
 }
+
+output "key_vault" {
+  description = "Non-sensitive development Azure Key Vault configuration."
+  value       = module.key_vault.key_vault
+}

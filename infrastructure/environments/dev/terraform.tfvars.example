@@ -3,6 +3,7 @@ subscription_id = "00000000-0000-0000-0000-000000000000"
 environment   = "dev"
 location      = "polandcentral"
 workload_name = "platform"
+key_vault_name = "kvaeplabexampledev"
 
 monthly_budget_amount = 10
 budget_start_date     = "2026-07-01T00:00:00Z"

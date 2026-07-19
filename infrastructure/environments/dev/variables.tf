@@ -228,3 +228,18 @@ variable "container_image" {
     error_message = "The container image must be an immutable ACR reference ending with @sha256:<64 hexadecimal characters>."
   }
 }
+
+variable "key_vault_name" {
+  description = "Globally unique name of the development Azure Key Vault."
+  type        = string
+
+  validation {
+    condition = (
+      length(var.key_vault_name) >= 3 &&
+      length(var.key_vault_name) <= 24 &&
+      can(regex("^[a-z][a-z0-9-]*[a-z0-9]$", var.key_vault_name)) &&
+      !strcontains(var.key_vault_name, "--")
+    )
+    error_message = "The Key Vault name must contain 3-24 lowercase letters, numbers, or hyphens, begin with a letter, end with a letter or number, and must not contain consecutive hyphens."
+  }
+}

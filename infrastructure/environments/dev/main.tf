@@ -78,3 +78,34 @@ module "container_apps" {
 
   tags = local.common_tags
 }
+
+module "key_vault" {
+  source = "../../modules/key_vault"
+
+  name                = var.key_vault_name
+  location            = azurerm_resource_group.platform.location
+  resource_group_name = azurerm_resource_group.platform.name
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+
+  sku_name                   = "standard"
+  soft_delete_retention_days = 7
+  purge_protection_enabled   = true
+
+  public_network_access_enabled = true
+  network_default_action        = "Allow"
+  network_bypass                = "AzureServices"
+
+  allowed_ip_rules   = []
+  allowed_subnet_ids = []
+
+  application_identity_principal_id = module.container_apps.managed_identity_principal_id
+  grant_application_secret_access   = true
+
+  tags = merge(
+    local.common_tags,
+    {
+      Component = "SecretsManagement"
+      Phase     = "IdentityFoundation"
+    }
+  )
+}
