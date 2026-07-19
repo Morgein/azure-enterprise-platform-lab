@@ -10,8 +10,8 @@ The roadmap moves from local development fundamentals to a production-oriented A
 
 | Field | Value |
 |---|---|
-| Overall completion | Approximately 45% |
-| Deployable Azure Platform Foundation | Approximately 80% |
+| Overall completion | Approximately 46% |
+| Deployable Azure Platform Foundation | Approximately 82% |
 | Primary environment | Development |
 | Primary region | Poland Central |
 | Current runtime | Azure Container Apps |
@@ -19,7 +19,7 @@ The roadmap moves from local development fundamentals to a production-oriented A
 | Delivery platform | GitHub Actions |
 | Authentication | GitHub OIDC and Managed Identity |
 | Security validation | Trivy, Checkov, and Dependency Review |
-| Current focus | Security evidence, governance, and workload identity |
+| Current focus | Governance evidence, workload identity, and Key Vault |
 
 ### Progress calculation
 
@@ -28,7 +28,7 @@ The roadmap moves from local development fundamentals to a production-oriented A
 | Phase 0 | 100% |
 | Phase 1 | 100% |
 | Phase 2 | 100% |
-| Phase 3 | 50% |
+| Phase 3 | 70% |
 | Phase 4 | 100% |
 | Phase 5 | 90% |
 | Phase 6 | 0% |
@@ -41,12 +41,12 @@ The roadmap moves from local development fundamentals to a production-oriented A
 | Phase 13 | 0% |
 
 ```text
-(100 + 100 + 100 + 50 + 100 + 90 + 90) / 14 = 45.0%
+(100 + 100 + 100 + 70 + 100 + 90 + 90) / 14 = 46.4%
 ```
 
-The complete advanced roadmap is therefore considered **45% complete**.
+The complete advanced roadmap is therefore considered approximately **46% complete**.
 
-The currently deployable Azure Platform Foundation is considered approximately **80% complete** because the application, container, networking, remote state, identity, delivery, and security-scanning foundations are operational.
+The currently deployable Azure Platform Foundation is considered approximately **82% complete** because the application, container, networking, remote state, identity, delivery, and security-scanning foundations are operational.
 
 ---
 
@@ -69,7 +69,7 @@ The currently deployable Azure Platform Foundation is considered approximately *
 | 0 | Repository and safety foundation | Completed | 100% |
 | 1 | Application, tests, Docker, and CI | Completed | 100% |
 | 2 | Terraform foundation and remote state | Completed | 100% |
-| 3 | Governance and cost controls | In progress | 50% |
+| 3 | Governance and cost controls | In progress | 70% |
 | 4 | Development Network Foundation | Completed | 100% |
 | 5 | Azure Container Registry and Container Apps | Evidence finalization | 90% |
 | 6 | Identity, Key Vault, Storage, and PostgreSQL | Planned | 0% |
@@ -266,7 +266,7 @@ Progress: **100%**
 
 Status: **In progress**
 
-Progress: **50%**
+Progress: **70%**
 
 ## Objectives
 
@@ -293,11 +293,20 @@ Progress: **50%**
 - [x] Bounded Container Apps maximum replicas.
 - [x] Deferred expensive services to controlled windows.
 - [x] Documented cost-based Checkov exceptions.
+- [x] Created a reusable Terraform Governance module.
+- [x] Created a subscription-level Azure Cost Management Budget.
+- [x] Configured a EUR 10 monthly spending threshold.
+- [x] Added Actual Cost alerts at 50%, 75%, and 90%.
+- [x] Added a Forecasted Cost alert at 100%.
+- [x] Stored notification recipients outside the Git repository.
+- [x] Added non-sensitive Governance outputs.
+- [x] Verified the Budget through Terraform state.
+- [x] Verified the Budget in Azure Portal.
+- [x] Captured sanitized Budget evidence.
+- [x] Verified a post-deployment no-drift plan.
 
 ## Remaining implementation
 
-- [ ] Configure Azure budget alerts.
-- [ ] Capture sanitized budget evidence.
 - [ ] Add selected Azure Policy definitions.
 - [ ] Document Azure Policy exemptions.
 - [ ] Create resource expiration rules.
@@ -306,7 +315,11 @@ Progress: **50%**
 - [ ] Add scheduled cost review.
 - [ ] Create a cleanup verification report.
 
-## Evidence requirements
+## Evidence
+
+- [Governance and Cost Controls Foundation](evidence/governance-cost-controls-foundation.md)
+
+## Additional evidence requirements
 
 - resource tags;
 - allowed-region validation;
@@ -318,7 +331,7 @@ Progress: **50%**
 ## Exit criteria
 
 - [ ] All resources contain required tags.
-- [ ] Budget alerts are configured.
+- [x] Budget alerts are configured.
 - [ ] Resource ownership is documented.
 - [ ] Policy behavior is tested.
 - [ ] Cleanup rules are documented.
@@ -1075,18 +1088,16 @@ Progress: **0%**
 
 The next tasks are:
 
-1. finalize the Security Scanning Foundation evidence Pull Request;
-2. merge the blocking security scanning workflow into `main`;
-3. configure and document Azure budget alerts;
-4. complete governance and cost-control evidence;
-5. create the Azure Key Vault Terraform module;
-6. configure Managed Identity access to Key Vault;
-7. create identity-based application Blob Storage;
-8. add container image signing and application SAST;
-9. add protected Terraform plan and apply workflows;
-10. add scheduled Terraform drift detection;
-11. demonstrate Container Apps rollback and traffic splitting;
-12. prepare the Azure API Management controlled deployment.
+1. finalize the Governance and Cost Controls evidence Pull Request;
+2. merge the validated Subscription Budget configuration into `main`;
+3. create the Azure Key Vault Terraform module;
+4. configure Managed Identity access to Key Vault;
+5. create identity-based application Blob Storage;
+6. add container image signing and application SAST;
+7. add protected Terraform plan and apply workflows;
+8. add scheduled Terraform drift detection;
+9. demonstrate Container Apps rollback and traffic splitting;
+10. prepare the Azure API Management controlled deployment.
 
 ---
 
@@ -1112,7 +1123,7 @@ It will be achieved when:
 - [x] dependency changes are reviewed;
 - [ ] Key Vault provides application secrets;
 - [ ] Blob Storage access uses Managed Identity;
-- [ ] budget alerts and governance evidence are complete.
+- [x] budget alerts and governance evidence are complete.
 
 ---
 
