@@ -58,6 +58,67 @@ variable "workload_name" {
   }
 }
 
+variable "monthly_budget_amount" {
+  description = "Maximum expected monthly spending amount for the development Azure Subscription Budget."
+  type        = number
+  default     = 10
+
+  validation {
+    condition     = var.monthly_budget_amount > 0
+    error_message = "monthly_budget_amount must be greater than zero."
+  }
+}
+
+variable "budget_start_date" {
+  description = "Start date of the Azure Subscription Budget in RFC3339 format."
+  type        = string
+
+  validation {
+    condition = can(
+      regex(
+        "^[0-9]{4}-[0-9]{2}-01T00:00:00Z$",
+        var.budget_start_date,
+      )
+    )
+
+    error_message = "budget_start_date must use RFC3339 format and the first day of a month."
+  }
+}
+
+variable "budget_end_date" {
+  description = "End date of the Azure Subscription Budget in RFC3339 format."
+  type        = string
+
+  validation {
+    condition = can(
+      regex(
+        "^[0-9]{4}-[0-9]{2}-01T00:00:00Z$",
+        var.budget_end_date,
+      )
+    )
+
+    error_message = "budget_end_date must use RFC3339 format and the first day of a month."
+  }
+}
+
+variable "budget_contact_emails" {
+  description = "Email addresses that receive Azure Cost Management budget notifications."
+  type        = list(string)
+  sensitive   = true
+
+  validation {
+    condition = (
+      length(var.budget_contact_emails) > 0 &&
+      alltrue([
+        for email in var.budget_contact_emails :
+        can(regex("^[^@[:space:]]+@[^@[:space:]]+\\.[^@[:space:]]+$", email))
+      ])
+    )
+
+    error_message = "budget_contact_emails must contain at least one valid email address."
+  }
+}
+
 variable "virtual_network_address_space" {
   description = "CIDR address spaces assigned to the development Virtual Network."
   type        = list(string)

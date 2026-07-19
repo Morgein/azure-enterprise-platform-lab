@@ -10,11 +10,11 @@ A production-oriented Azure Platform Engineering project built incrementally fro
 The project deploys a tested FastAPI service to Azure Container Apps through Terraform and a secretless GitHub Actions Continuous Deployment pipeline.
 
 > **Status:** In development  
-> **Roadmap completion:** Approximately 45%  
+> **Roadmap completion:** Approximately 46%  
 > **Primary environment:** Development  
 > **Primary region:** Poland Central  
 > **Cloud subscription:** Azure for Students  
-> **Current focus:** Security evidence, governance, and workload identity
+> **Current focus:** Governance evidence, workload identity, and Key Vault
 
 ---
 
@@ -86,6 +86,10 @@ The current implementation includes:
 - GitHub Dependency Review;
 - SARIF integration with GitHub Code Scanning;
 - scheduled security re-evaluation;
+- Azure Subscription Budget;
+- EUR 10 monthly cost limit;
+- Actual Cost alerts at 50%, 75%, and 90%;
+- Forecasted Cost alert at 100%;
 - sanitized deployment evidence.
 
 Later phases extend the platform with:
@@ -115,7 +119,7 @@ The official roadmap contains fourteen phases numbered from `0` to `13`.
 | 0 | Repository and safety foundation | 100% |
 | 1 | FastAPI application, tests, Docker, and CI | 100% |
 | 2 | Terraform bootstrap and remote state | 100% |
-| 3 | Governance and cost controls | 50% |
+| 3 | Governance and cost controls | 70% |
 | 4 | Development Network Foundation | 100% |
 | 5 | Azure Container Registry and Container Apps | 90% |
 | 6 | Identity, Key Vault, Storage, and PostgreSQL | 0% |
@@ -130,12 +134,12 @@ The official roadmap contains fourteen phases numbered from `0` to `13`.
 Approximate completion:
 
 ```text
-(100 + 100 + 100 + 50 + 100 + 90 + 90) / 14 = 45.0%
+(100 + 100 + 100 + 70 + 100 + 90 + 90) / 14 = 46.4%
 ```
 
-The project is therefore considered approximately **45% complete**.
+The project is therefore considered approximately **46% complete**.
 
-This percentage measures the complete advanced roadmap. The deployable Azure Platform Foundation itself is approximately **80% complete**.
+This percentage measures the complete advanced roadmap. The deployable Azure Platform Foundation itself is approximately **82% complete**.
 
 ---
 
@@ -221,7 +225,24 @@ This percentage measures the complete advanced roadmap. The deployable Azure Pla
 - resource-scoped Azure RBAC;
 - scale-to-zero configuration;
 - public HTTPS ingress;
-- deployment smoke testing.
+- deployment smoke testing;
+- subscription-level cost monitoring;
+- monthly Azure Budget;
+- Actual and Forecasted Cost alerts.
+
+### Governance and cost-control foundation
+
+- reusable Terraform Governance module;
+- subscription-level Azure Cost Management Budget;
+- EUR 10 monthly budget amount;
+- Actual Cost alert at 50%;
+- Actual Cost alert at 75%;
+- Actual Cost alert at 90%;
+- Forecasted Cost alert at 100%;
+- notification recipients stored only in ignored Terraform variables;
+- non-sensitive Governance outputs;
+- remote-state management;
+- verified post-deployment no-drift plan.
 
 ### Security scanning foundation
 
@@ -262,6 +283,7 @@ flowchart TD
 
     Terraform["Terraform"] --> Azure["Azure Control Plane"]
     Terraform --> State["Azure Blob Remote State"]
+    Terraform --> Budget["Azure Subscription Budget"]
 
     GitHub["GitHub Repository"] --> CI["Continuous Integration"]
     GitHub --> Security["Security Scanning"]
@@ -385,7 +407,7 @@ A deployment is successful only when:
 
 ## Infrastructure
 
-The development Terraform state currently manages approximately twenty-nine Azure resources.
+The development Terraform state currently manages approximately thirty Azure resources.
 
 ### Resource organization
 
@@ -401,6 +423,7 @@ Poland Central
 
 | Module | Purpose |
 |---|---|
+| `governance` | Subscription Budget and Cost Management alerts |
 | `network` | VNet, subnets, NSGs, and associations |
 | `container_registry` | Azure Container Registry |
 | `container_apps` | Container Apps Environment, application, and runtime identity |
@@ -746,6 +769,10 @@ Implemented controls:
 
 - Poland Central deployment;
 - allowed-region validation;
+- EUR 10 monthly Subscription Budget;
+- Actual Cost alerts at 50%, 75%, and 90%;
+- Forecasted Cost alert at 100%;
+- notification email stored outside Git;
 - ACR Basic tier;
 - Container Apps Consumption;
 - scale-to-zero;
@@ -845,6 +872,7 @@ terraform plan
 - [Container Platform Foundation](docs/evidence/container-platform-foundation.md)
 - [Continuous Deployment Foundation](docs/evidence/continuous-deployment-foundation.md)
 - [Security Scanning Foundation](docs/evidence/security-scanning-foundation.md)
+- [Governance and Cost Controls Foundation](docs/evidence/governance-cost-controls-foundation.md)
 
 ### Evidence principles
 
@@ -884,6 +912,7 @@ Evidence must:
 │   │   ├── staging/
 │   │   └── production/
 │   └── modules/
+│       ├── governance/
 │       ├── network/
 │       ├── container_registry/
 │       ├── container_apps/
@@ -1117,6 +1146,8 @@ The project follows these rules:
 - run scheduled security re-evaluation;
 - sanitize screenshots and documentation;
 - review Terraform plans before apply;
+- keep real Budget notification emails in ignored variable files;
+- verify Budget configuration through post-apply no-drift plans;
 - use feature branches and Pull Requests;
 - do not broaden Azure roles without a documented failure and review.
 
@@ -1160,10 +1191,10 @@ Not yet implemented:
 
 Immediate targets:
 
-1. finalize the Security Scanning evidence Pull Request;
-2. merge the validated security workflow into `main`;
-3. complete governance and Azure budget evidence;
-4. add Key Vault and workload secret access;
+1. finalize the Governance and Cost Controls evidence Pull Request;
+2. merge the validated Subscription Budget configuration into `main`;
+3. create a reusable Key Vault module;
+4. add Key Vault access through Managed Identity;
 5. add identity-based Azure Blob Storage access;
 6. evaluate Notation-based container image signing;
 7. add Python Static Application Security Testing;

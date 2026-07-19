@@ -3,8 +3,18 @@ subscription_id = "00000000-0000-0000-0000-000000000000"
 environment   = "dev"
 location      = "polandcentral"
 workload_name = "platform"
+
+monthly_budget_amount = 10
+budget_start_date     = "2026-07-01T00:00:00Z"
+budget_end_date       = "2027-07-01T00:00:00Z"
+
+budget_contact_emails = [
+  "replace-with-your-notification-email@example.com",
+]
+
 container_registry_name = "acraeplabexampledev"
 container_registry_sku  = "Basic"
+
 container_image = "acrexampledev.azurecr.io/azure-platform-api@sha256:0000000000000000000000000000000000000000000000000000000000000000"
 
 virtual_network_address_space = ["10.20.0.0/16"]
