@@ -20,6 +20,20 @@ output "resource_group" {
   }
 }
 
+output "governance" {
+  description = "Non-sensitive configuration of the Azure Subscription Budget."
+
+  value = {
+    id                                = module.governance.id
+    name                              = module.governance.name
+    monthly_amount                    = module.governance.amount
+    time_grain                        = module.governance.time_grain
+    period                            = module.governance.period
+    actual_notification_thresholds    = module.governance.actual_notification_thresholds
+    forecasted_notification_threshold = module.governance.forecasted_notification_threshold
+  }
+}
+
 output "network" {
   description = "Development Virtual Network, subnet, and NSG details."
 

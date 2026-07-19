@@ -4,6 +4,19 @@ resource "azurerm_resource_group" "platform" {
   tags     = local.common_tags
 }
 
+module "governance" {
+  source = "../../modules/governance"
+
+  name            = "budget-${local.name_prefix}-monthly"
+  subscription_id = var.subscription_id
+
+  amount     = var.monthly_budget_amount
+  start_date = var.budget_start_date
+  end_date   = var.budget_end_date
+
+  contact_emails = var.budget_contact_emails
+}
+
 module "network" {
   source = "../../modules/network"
 
